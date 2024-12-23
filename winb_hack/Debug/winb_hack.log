@@ -1,15 +1,6 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: 중간 디렉터리(Debug\)에 다른 프로젝트(winb.vcxproj)에서 공유하는 파일이 포함되어 있습니다.  이로 인해 잘못된 정리 및 다시 빌드 동작이 수행될 수 있습니다.
-  Client.cpp
-C:\Users\lmwlj\Desktop\MemoryBasedBot_KingdomOfTheWind-master\winb_hack\winb_hack\Macro.h(9,3): warning C4091: 'static ': 변수를 선언하지 않으면 'Macro::Point' 왼쪽은 무시됩니다.
-C:\Users\lmwlj\Desktop\MemoryBasedBot_KingdomOfTheWind-master\winb_hack\winb_hack\Client.cpp(349,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-  dllmain.cpp
-C:\Users\lmwlj\Desktop\MemoryBasedBot_KingdomOfTheWind-master\winb_hack\winb_hack\dllmain.cpp(2,1): warning C4603: '_WINSOCK_DEPRECATED_NO_WARNINGS': 매크로가 정의되지 않았거나 미리 컴파일된 헤더 사용 후와 정의가 다릅니다.
-C:\Users\lmwlj\Desktop\MemoryBasedBot_KingdomOfTheWind-master\winb_hack\winb_hack\dllmain.cpp(2,1): message : 여기에서 정의하지 않고 미리 컴파일된 헤더에 매크로 추가
-C:\Users\lmwlj\Desktop\MemoryBasedBot_KingdomOfTheWind-master\winb_hack\winb_hack\dllmain.cpp(6,1): message : 미리 컴파일된 헤더 사용
-C:\Users\lmwlj\Desktop\MemoryBasedBot_KingdomOfTheWind-master\winb_hack\winb_hack\dllmain.cpp(3,1): warning C4603: '_CRT_SECURE_NO_WARNINGS': 매크로가 정의되지 않았거나 미리 컴파일된 헤더 사용 후와 정의가 다릅니다.
-C:\Users\lmwlj\Desktop\MemoryBasedBot_KingdomOfTheWind-master\winb_hack\winb_hack\dllmain.cpp(3,1): message : 여기에서 정의하지 않고 미리 컴파일된 헤더에 매크로 추가
-C:\Users\lmwlj\Desktop\MemoryBasedBot_KingdomOfTheWind-master\winb_hack\winb_hack\dllmain.cpp(6,1): message : 미리 컴파일된 헤더 사용
-C:\Users\lmwlj\Desktop\MemoryBasedBot_KingdomOfTheWind-master\winb_hack\winb_hack\Macro.h(9,3): warning C4091: 'static ': 변수를 선언하지 않으면 'Macro::Point' 왼쪽은 무시됩니다.
-C:\Users\lmwlj\Desktop\MemoryBasedBot_KingdomOfTheWind-master\winb_hack\winb_hack\dllmain.cpp(369,7): warning C4101: 'nameMsg' :참조되지 않은 지역 변수입니다.
-  코드를 생성하고 있습니다...
-  winb_hack.vcxproj -> C:\Users\lmwlj\Desktop\MemoryBasedBot_KingdomOfTheWind-master\winb_hack\Debug\winb_hack.dll
+  Macro.cpp
+C:\programming\winds-packet\winb_hack\Macro.h(10,3): warning C4091: 'static ': 변수를 선언하지 않으면 'Macro::Point' 왼쪽은 무시됩니다.
+C:\programming\winds-packet\winb_hack\Macro.cpp(107,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\programming\winds-packet\winb_hack\Macro.cpp(124,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  winb_hack.vcxproj -> C:\programming\winds-packet\Debug\winb_hack.dll

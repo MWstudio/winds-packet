@@ -37,12 +37,12 @@ void Client::Send_Packet_Hook_Callback()
 	/*std::stringstream result;
 	std::copy(data.begin(), data.end(), std::ostream_iterator<int>(result, " "));
 	std::string test = result.str();*/
-	//printf("Client is sending... : \n");
-	//printf("%zu: ", data.size()); // data.size() 출력
-	//for (int i = 0; i < data.size(); i++) {
-	//	printf("%02X ", data[i]);
-	//}
-	//printf("\n");
+	printf("Client is sending... : \n");
+	printf("%zu: ", data.size()); // data.size() 출력
+	for (int i = 0; i < data.size(); i++) {
+		printf("%02X ", data[i]);
+	}
+	printf("\n");
 	if (data[0] == 0x32 && hooks->Outgoing_Packet_Length == 8) {
 		if (data[1] == 0x00) {
 			Macro::playerX = data[4];
@@ -123,7 +123,7 @@ void Client::Send_Packet_Hook_Callback()
 	}
 }
 
-void curse(int playerId, int x, int y, int map1, int map2) {
+void curse(int playerId, int x, int y, int map1, int map2, int map3) {
 	// 0F 0D 01 03 2A 22 00 07 00 08 00 퇴마
 	if (x == 0 && y == 0) {
 		return;
@@ -134,9 +134,10 @@ void curse(int playerId, int x, int y, int map1, int map2) {
 	}
 	int size = 11;
 	char packet[11] = { 0x0F, 0x0D, 0x01, 0x03, 0x2A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-
-	packet[3] = map1;
-	packet[4] = map2;
+	packet[1] = Macro::exorcismKey;
+	packet[2] = map1;
+	packet[3] = map2;
+	packet[4] = map3;
 	packet[5] = playerId;
 	packet[7] = x;
 	packet[9] = y;
@@ -156,7 +157,7 @@ void curse(int playerId, int x, int y, int map1, int map2) {
 	return;
 }
 
-void necromancy(int playerId, int x, int y, int map1, int map2) { 
+void necromancy(int playerId, int x, int y, int map1, int map2, int map3) {
 	// 0F 08 01 03 2A 22 00 07 00 08 00 파혼  
 	// 0F 08 01 03 2B 14 00 09 00 0A 00
 	// 0F 08 0D 4A 9E AA 00 06 00 06 00
@@ -166,15 +167,16 @@ void necromancy(int playerId, int x, int y, int map1, int map2) {
 	if (playerId == 0) {
 		return;
 	}
-
 	int size = 11;
 	char packet[11] = { 0x0F, 0x08, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-
-	packet[3] = map1;
-	packet[4] = map2;
+	packet[1] = Macro::divorceKey;
+	packet[2] = map1;
+	packet[3] = map2;
+	packet[4] = map3;
 	packet[5] = playerId;
 	packet[7] = x;
 	packet[9] = y;
+
 	unsigned char sendpacket[100] = { "0", };
 	Hooks::LoadEncrypt(packet, size, Hooks::encrypted);
 	sendpacket[0] = 0xAA;
@@ -187,7 +189,7 @@ void necromancy(int playerId, int x, int y, int map1, int map2) {
 		printf("Send failed with error: %d\n", WSAGetLastError());
 		return;
 	}
-	printf("necromancy : x,y,id: %d,%d %d %d %d\n", x,y, playerId, map1,map2);
+	printf("necromancy : x, y, id, map1, map2, map3: %d,%d %d %d %d %d\n", x, y, playerId, map1, map2, map3);
 	return;
 }
 
@@ -222,8 +224,9 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 		}
 	}
 	else if ((*data)[0] == 0x11 && dataSize == 0x7) {
-		Macro::map1 = (*data)[2];
-		Macro::map2 = (*data)[3];
+		Macro::map1 = (*data)[1];
+		Macro::map2 = (*data)[2];
+		Macro::map3 = (*data)[3];
 	}
 	//it's me
 	else if ((*data)[0] == 0x5 && dataSize == 0xd || (*data)[0] == 0x11 && dataSize == 0x7) {
@@ -232,15 +235,19 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 
 	//select player id
 	else if ((*data)[0] == 0x34 && (*data)[(*data).size() - 1] == 0x00 && (*data)[(*data).size() - 2] == 0x2e && (*data)[(*data).size() - 3] == 0xdb && (*data)[(*data).size() - 4] == 0xc0) {
+		int id = 0;
 		for (size_t i = 0; i <= dataSize - 6; ++i) {
 			if ((*data)[i] == 0x01 && (*data)[i + 1] == 0x01 &&
 				(*data)[i + 2] == 0x00 && (*data)[i + 3] == 0x00 &&
 				(*data)[i + 4] == 0x00 && (*data)[i + 5] == 0x00) {
-				Macro::selectedPlayerId = (*data)[i - 1];
+				id = (*data)[i - 1];
 				break;
 			}
 		}
-		printf("selectedPlayerId :: %d\n", Macro::selectedPlayerId);
+		if (Macro::playerId != id && id != 0) {
+			Macro::selectedPlayerId = id;
+			printf("selectedPlayerId :: %d\n", Macro::selectedPlayerId);
+		}
 	}
 	// 29 3a 75 a3 78 0d 00
 	// 29 3a 75 a3 78 31 00
@@ -252,7 +259,7 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 			Macro::necromancyReceivedSelected = 1;  // Set the flag to true
 			while (true) {
 				Sleep(100);
-				necromancy(Macro::selectedPlayerId, Macro::selectedPlayerX, Macro::selectedPlayerY, Macro::map1, Macro::map2);
+				necromancy(Macro::selectedPlayerId, Macro::selectedPlayerX, Macro::selectedPlayerY, Macro::map1, Macro::map2, Macro::map3);
 				if (Macro::necromancyReceivedSelected == 0) {
 					break;
 				}
@@ -262,7 +269,7 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 			Macro::necromancyReceivedMe = 1;  // Set the flag to true
 			while (true) {
 				Sleep(100);
-				necromancy(Macro::playerId, Macro::playerX, Macro::playerY, Macro::map1, Macro::map2);
+				necromancy(Macro::playerId, Macro::playerX, Macro::playerY, Macro::map1, Macro::map2, Macro::map3);
 				if (Macro::necromancyReceivedMe == 0) {
 					break;
 				}
@@ -285,7 +292,7 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 			Macro::curseReceivedSelected = 1;  // Set the flag to true
 			while (true) {
 				Sleep(100);
-				curse(Macro::selectedPlayerId, Macro::selectedPlayerX, Macro::selectedPlayerY, Macro::map1, Macro::map2);
+				curse(Macro::selectedPlayerId, Macro::selectedPlayerX, Macro::selectedPlayerY, Macro::map1, Macro::map2, Macro::map3);
 				if (Macro::curseReceivedSelected == 0) {
 					break;
 				}
@@ -295,7 +302,7 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 			Macro::curseReceivedMe = 1;  // Set the flag to true
 			while (true) {
 				Sleep(100);
-				curse(Macro::playerId, Macro::playerX, Macro::playerY, Macro::map1, Macro::map2);
+				curse(Macro::playerId, Macro::playerX, Macro::playerY, Macro::map1, Macro::map2, Macro::map3);
 				if (Macro::curseReceivedMe == 0) {
 					break;
 				}
@@ -303,7 +310,7 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 		}
 	}
 
-	else if ((*data)[0] == 0x29 && (*data)[1] == 0x01 && (*data)[2] == 0x03 && (*data)[5] == 0x16) {
+	else if ((*data)[0] == 0x29  && (*data)[5] == 0x16) {
 		if ((*data)[4] == Macro::selectedPlayerId) {
 			Macro::curseReceivedSelected = 0;  // Set the flag to true
 		}
@@ -347,12 +354,12 @@ void Client::Recv_Packet_Hook_Callback()
 	//int strLen = 0;
 	//char nameMsg[DEFAULT_BUFLEN];
 	//int y;
-	printf("Client is receiving... : \n");
-	printf("%zu: ", data.size()); // data.size() 출력
-	for (int i = 0; i < data.size(); i++) {
-		printf("%02x ", data[i]);
-	}
-	printf("\n");
+	//printf("Client is receiving... : \n");
+	//printf("%zu: ", data.size()); // data.size() 출력
+	//for (int i = 0; i < data.size(); i++) {
+	//	printf("%02x ", data[i]);
+	//}
+	//printf("\n");
 
 	//if (data[0] == 0x34 && data[1] == 0x00 && data[2] == 0x00 && data[3] == 0x00 && data[4] == 0x04) {
 	//	Macro::playerId = data[data.size() - 29];
