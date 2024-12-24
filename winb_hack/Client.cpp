@@ -354,12 +354,12 @@ void Client::Recv_Packet_Hook_Callback()
 	//int strLen = 0;
 	//char nameMsg[DEFAULT_BUFLEN];
 	//int y;
-	//printf("Client is receiving... : \n");
-	//printf("%zu: ", data.size()); // data.size() 출력
-	//for (int i = 0; i < data.size(); i++) {
-	//	printf("%02x ", data[i]);
-	//}
-	//printf("\n");
+	printf("Client is receiving... : \n");
+	printf("%zu: ", data.size()); // data.size() 출력
+	for (int i = 0; i < data.size(); i++) {
+		printf("%02x ", data[i]);
+	}
+	printf("\n");
 
 	//if (data[0] == 0x34 && data[1] == 0x00 && data[2] == 0x00 && data[3] == 0x00 && data[4] == 0x04) {
 	//	Macro::playerId = data[data.size() - 29];

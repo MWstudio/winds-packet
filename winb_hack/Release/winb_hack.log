@@ -1,0 +1,31 @@
+﻿  stdafx.cpp
+  ASM.cpp
+  bytebuffer.cpp
+  Client.cpp
+C:\programming\winds-packet\winb_hack\Macro.h(10,3): warning C4091: 'static ': 변수를 선언하지 않으면 'Macro::Point' 왼쪽은 무시됩니다.
+C:\programming\winds-packet\winb_hack\Client.cpp(42,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\programming\winds-packet\winb_hack\Client.cpp(137,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\programming\winds-packet\winb_hack\Client.cpp(172,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\programming\winds-packet\winb_hack\Client.cpp(359,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  Macro.cpp
+C:\programming\winds-packet\winb_hack\Macro.h(10,3): warning C4091: 'static ': 변수를 선언하지 않으면 'Macro::Point' 왼쪽은 무시됩니다.
+C:\programming\winds-packet\winb_hack\Macro.cpp(141,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\programming\winds-packet\winb_hack\Macro.cpp(158,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  winb_hack.cpp
+  dllmain.cpp
+C:\programming\winds-packet\winb_hack\dllmain.cpp(2,1): warning C4603: '_WINSOCK_DEPRECATED_NO_WARNINGS': 매크로가 정의되지 않았거나 미리 컴파일된 헤더 사용 후와 정의가 다릅니다.
+C:\programming\winds-packet\winb_hack\dllmain.cpp(2,1): message : 여기에서 정의하지 않고 미리 컴파일된 헤더에 매크로 추가
+C:\programming\winds-packet\winb_hack\dllmain.cpp(6,1): message : 미리 컴파일된 헤더 사용
+C:\programming\winds-packet\winb_hack\dllmain.cpp(3,1): warning C4603: '_CRT_SECURE_NO_WARNINGS': 매크로가 정의되지 않았거나 미리 컴파일된 헤더 사용 후와 정의가 다릅니다.
+C:\programming\winds-packet\winb_hack\dllmain.cpp(3,1): message : 여기에서 정의하지 않고 미리 컴파일된 헤더에 매크로 추가
+C:\programming\winds-packet\winb_hack\dllmain.cpp(6,1): message : 미리 컴파일된 헤더 사용
+C:\programming\winds-packet\winb_hack\Macro.h(10,3): warning C4091: 'static ': 변수를 선언하지 않으면 'Macro::Point' 왼쪽은 무시됩니다.
+C:\programming\winds-packet\winb_hack\dllmain.cpp(315,7): warning C4101: 'nameMsg' :참조되지 않은 지역 변수입니다.
+  Hooks.cpp
+C:\programming\winds-packet\winb_hack\Hooks.cpp(31,2): warning C4102: 'Winbaram_004A8290': 참조되지 않은 레이블입니다.
+  Properties.cpp
+  코드를 생성하고 있습니다.
+  Previous IPDB not found, fall back to full compilation.
+  All 243 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  코드를 생성했습니다.
+  winb_hack.vcxproj -> C:\programming\winds-packet\Release\winb_hack.dll

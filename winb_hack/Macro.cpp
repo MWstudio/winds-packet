@@ -131,7 +131,7 @@ DWORD WINAPI Macro::startDiamond(LPVOID lpParam) {
 	while (true) {
 		if (isDiamond == 1)
 			diamondBody();
-		Sleep(300);
+		Sleep(500);
 	}
 }
 
