@@ -123,7 +123,7 @@ DWORD WINAPI Macro::startCycle(LPVOID lpParam) {
 	while (true) {
 		if (isCycle == 1)
 			cycle();
-		Sleep(300);
+		Sleep(200);
 	}
 }
 

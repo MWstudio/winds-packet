@@ -5,6 +5,7 @@
 #include "ASM.h"
 #include "stdio.h"
 #include "Hooks.h"
+#include "threadpool.cpp"
 
 #define Naked __declspec (naked)
 class Client

@@ -1,0 +1,11 @@
+15: 3a 08 b1 dd b0 ad ba d2 c3 bc 00 00 00 00 00
+Client is receiving... :
+19: 0a 03 00 0e b1 dd b0 ad ba d2 c3 bc 20 c7 d8 c1 a6 2e 00
+
+15: 3a 08 b1 dd b0 ad ba d2 c3 bc 00 00 00 00 00
+Client is receiving... :
+19: 0a 03 00 0e b1 dd b0 ad ba d2 c3 bc 20 c7 d8 c1 a6 2e 00
+
+15: 3a 08 b1 dd b0 ad ba d2 c3 bc 00 00 00 00 00
+Client is receiving... :
+19: 0a 03 00 0e b1 dd b0 ad ba d2 c3 bc 20 c7 d8 c1 a6 2e 00

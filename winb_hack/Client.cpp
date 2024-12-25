@@ -27,104 +27,8 @@ void Client::Con_Packet_Hook_Callback()
 	printf("----Socket: %x\n", hooks->Con_Packet_Socket);
 }
 
-
-void Client::Send_Packet_Hook_Callback()
-{
-	// if you want to see send packets, delete the remark below
-	
-	ByteBuffer Packet((LPVOID)hooks->Outgoing_Packet_Pointer, hooks->Outgoing_Packet_Length);
-	std::vector<uint8_t> data = Packet.ReadBytes(0, hooks->Outgoing_Packet_Length);
-	/*std::stringstream result;
-	std::copy(data.begin(), data.end(), std::ostream_iterator<int>(result, " "));
-	std::string test = result.str();*/
-	printf("Client is sending... : \n");
-	printf("%zu: ", data.size()); // data.size() Ãâ·Â
-	for (int i = 0; i < data.size(); i++) {
-		printf("%02X ", data[i]);
-	}
-	printf("\n");
-	if (data[0] == 0x32 && hooks->Outgoing_Packet_Length == 8) {
-		if (data[1] == 0x00) {
-			Macro::playerX = data[4];
-			Macro::playerY = data[6] - 1;
-			//printf("%s %d\n", "playerX:", Macro::playerX);
-			//printf("%s %d\n", "playerY:", Macro::playerY);
-		}
-		if (data[1] == 0x01) {
-			Macro::playerX = data[4] + 1;
-			Macro::playerY = data[6];
-			//printf("%s %d\n", "playerX:", Macro::playerX);
-			//printf("%s %d\n", "playerY:", Macro::playerY);
-		}
-		if (data[1] == 0x02) {
-			Macro::playerX = data[4];
-			Macro::playerY = data[6] + 1;
-			//printf("%s %d\n", "playerX:", Macro::playerX);
-			//printf("%s %d\n", "playerY:", Macro::playerY);
-		}
-		if (data[1] == 0x03) {
-			Macro::playerX = data[4] - 1;
-			Macro::playerY = data[6];
-			//printf("%s %d\n", "playerX:", Macro::playerX);
-			//printf("%s %d\n", "playerY:", Macro::playerY);
-		}
-	}
-	else if (data[0] == 0x06 && hooks->Outgoing_Packet_Length == 16) {
-		if (data[1] == 0x00) {
-			Macro::playerX = data[4];
-			Macro::playerY = data[6] - 1;
-			//printf("%s %d\n", "playerX:", Macro::playerX);
-			//printf("%s %d\n", "playerY:", Macro::playerY);
-		}
-		if (data[1] == 0x01) {
-			Macro::playerX = data[4] + 1;
-			Macro::playerY = data[6];
-			//printf("%s %d\n", "playerX:", Macro::playerX);
-			//printf("%s %d\n", "playerY:", Macro::playerY);
-		}
-		if (data[1] == 0x02) {
-			Macro::playerX = data[4];
-			Macro::playerY = data[6] + 1;
-			//printf("%s %d\n", "playerX:", Macro::playerX);
-			//printf("%s %d\n", "playerY:", Macro::playerY);
-		}
-		if (data[1] == 0x03) {
-			Macro::playerX = data[4] - 1;
-			Macro::playerY = data[6];
-			//printf("%s %d\n", "playerX:", Macro::playerX);
-			//printf("%s %d\n", "playerY:", Macro::playerY);
-		}
-	}
-	else if (data[0] == 0x06 && hooks->Outgoing_Packet_Length == 20) {
-		if (data[1] == 0x00) {
-			Macro::playerX = data[4];
-			Macro::playerY = data[6] - 1;
-			//printf("%s %d\n", "playerX:", Macro::playerX);
-			//printf("%s %d\n", "playerY:", Macro::playerY);
-		}
-		if (data[1] == 0x01) {
-			Macro::playerX = data[4] + 1;
-			Macro::playerY = data[6];
-			//printf("%s %d\n", "playerX:", Macro::playerX);
-			//printf("%s %d\n", "playerY:", Macro::playerY);
-		}
-		if (data[1] == 0x02) {
-			Macro::playerX = data[4];
-			Macro::playerY = data[6] + 1;
-			//printf("%s %d\n", "playerX:", Macro::playerX);
-			//printf("%s %d\n", "playerY:", Macro::playerY);
-		}
-		if (data[1] == 0x03) {
-			Macro::playerX = data[4] - 1;
-			Macro::playerY = data[6];
-			//printf("%s %d\n", "playerX:", Macro::playerX);
-			//printf("%s %d\n", "playerY:", Macro::playerY);
-		}
-	}
-}
-
 void curse(int playerId, int x, int y, int map1, int map2, int map3) {
-	// 0F 0D 01 03 2A 22 00 07 00 08 00 Åð¸¶
+	// 0F 0D 01 03 2A 22 00 07 00 08 00 ï¿½ï¿½
 	if (x == 0 && y == 0) {
 		return;
 	}
@@ -158,7 +62,7 @@ void curse(int playerId, int x, int y, int map1, int map2, int map3) {
 }
 
 void necromancy(int playerId, int x, int y, int map1, int map2, int map3) {
-	// 0F 08 01 03 2A 22 00 07 00 08 00 ÆÄÈ¥  
+	// 0F 08 01 03 2A 22 00 07 00 08 00 ï¿½ï¿½È¥  
 	// 0F 08 01 03 2B 14 00 09 00 0A 00
 	// 0F 08 0D 4A 9E AA 00 06 00 06 00
 	if (x == 0 && y == 0) {
@@ -253,12 +157,12 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 	// 29 3a 75 a3 78 31 00
 	// 29 01 03 2b 49 31 00
 	// 
-	// È¥¸¶ 29 ?? ?? ?? unidque_id 27 00
+	// È¥ï¿½ï¿½ 29 ?? ?? ?? unidque_id 27 00
 	else if ((*data)[0] == 0x29 && (*data)[5] == 0x27) {
 		if ((*data)[4] == Macro::selectedPlayerId) {
 			Macro::necromancyReceivedSelected = 1;  // Set the flag to true
 			while (true) {
-				Sleep(100);
+				Sleep(300);
 				necromancy(Macro::selectedPlayerId, Macro::selectedPlayerX, Macro::selectedPlayerY, Macro::map1, Macro::map2, Macro::map3);
 				if (Macro::necromancyReceivedSelected == 0) {
 					break;
@@ -268,7 +172,7 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 		else if ((*data)[4] == Macro::playerId) {
 			Macro::necromancyReceivedMe = 1;  // Set the flag to true
 			while (true) {
-				Sleep(100);
+				Sleep(300);
 				necromancy(Macro::playerId, Macro::playerX, Macro::playerY, Macro::map1, Macro::map2, Macro::map3);
 				if (Macro::necromancyReceivedMe == 0) {
 					break;
@@ -286,12 +190,12 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 		}
 	}
 
-	// ÀúÁÖ 29 01 03 ?? unidque_id 0d 00
+	// ï¿½ï¿½ï¿½ï¿½ 29 01 03 ?? unidque_id 0d 00
 	else if ((*data)[0] == 0x29 && (*data)[5] == 0x0D) {
 		if ((*data)[4] == Macro::selectedPlayerId) {
 			Macro::curseReceivedSelected = 1;  // Set the flag to true
 			while (true) {
-				Sleep(100);
+				Sleep(300);
 				curse(Macro::selectedPlayerId, Macro::selectedPlayerX, Macro::selectedPlayerY, Macro::map1, Macro::map2, Macro::map3);
 				if (Macro::curseReceivedSelected == 0) {
 					break;
@@ -301,7 +205,7 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 		else if ((*data)[4] == Macro::playerId) {
 			Macro::curseReceivedMe = 1;  // Set the flag to true
 			while (true) {
-				Sleep(100);
+				Sleep(300);
 				curse(Macro::playerId, Macro::playerX, Macro::playerY, Macro::map1, Macro::map2, Macro::map3);
 				if (Macro::curseReceivedMe == 0) {
 					break;
@@ -325,6 +229,119 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 	return 0;
 }
 
+DWORD WINAPI checkSendPacket(LPVOID lpParam) {
+	std::vector<uint8_t>* data = (std::vector<uint8_t>*)lpParam;
+	size_t dataSize = data->size();
+	if ((*data)[0] == 0x32 && dataSize == 8) {
+		if ((*data)[1] == 0x00) {
+			Macro::playerX = (*data)[4];
+			Macro::playerY = (*data)[6] - 1;
+			//printf("%s %d\n", "playerX:", Macro::playerX);
+			//printf("%s %d\n", "playerY:", Macro::playerY);
+		}
+		if ((*data)[1] == 0x01) {
+			Macro::playerX = (*data)[4] + 1;
+			Macro::playerY = (*data)[6];
+			//printf("%s %d\n", "playerX:", Macro::playerX);
+			//printf("%s %d\n", "playerY:", Macro::playerY);
+		}
+		if ((*data)[1] == 0x02) {
+			Macro::playerX = (*data)[4];
+			Macro::playerY = (*data)[6] + 1;
+			//printf("%s %d\n", "playerX:", Macro::playerX);
+			//printf("%s %d\n", "playerY:", Macro::playerY);
+		}
+		if ((*data)[1] == 0x03) {
+			Macro::playerX = (*data)[4] - 1;
+			Macro::playerY = (*data)[6];
+			//printf("%s %d\n", "playerX:", Macro::playerX);
+			//printf("%s %d\n", "playerY:", Macro::playerY);
+		}
+	}
+	else if ((*data)[0] == 0x06 && dataSize == 16) {
+		if ((*data)[1] == 0x00) {
+			Macro::playerX = (*data)[4];
+			Macro::playerY = (*data)[6] - 1;
+			//printf("%s %d\n", "playerX:", Macro::playerX);
+			//printf("%s %d\n", "playerY:", Macro::playerY);
+		}
+		if ((*data)[1] == 0x01) {
+			Macro::playerX = (*data)[4] + 1;
+			Macro::playerY = (*data)[6];
+			//printf("%s %d\n", "playerX:", Macro::playerX);
+			//printf("%s %d\n", "playerY:", Macro::playerY);
+		}
+		if ((*data)[1] == 0x02) {
+			Macro::playerX = (*data)[4];
+			Macro::playerY = (*data)[6] + 1;
+			//printf("%s %d\n", "playerX:", Macro::playerX);
+			//printf("%s %d\n", "playerY:", Macro::playerY);
+		}
+		if ((*data)[1] == 0x03) {
+			Macro::playerX = (*data)[4] - 1;
+			Macro::playerY = (*data)[6];
+			//printf("%s %d\n", "playerX:", Macro::playerX);
+			//printf("%s %d\n", "playerY:", Macro::playerY);
+		}
+	}
+	else if ((*data)[0] == 0x06 && dataSize == 20) {
+		if ((*data)[1] == 0x00) {
+			Macro::playerX = (*data)[4];
+			Macro::playerY = (*data)[6] - 1;
+			//printf("%s %d\n", "playerX:", Macro::playerX);
+			//printf("%s %d\n", "playerY:", Macro::playerY);
+		}
+		if ((*data)[1] == 0x01) {
+			Macro::playerX = (*data)[4] + 1;
+			Macro::playerY = (*data)[6];
+			//printf("%s %d\n", "playerX:", Macro::playerX);
+			//printf("%s %d\n", "playerY:", Macro::playerY);
+		}
+		if ((*data)[1] == 0x02) {
+			Macro::playerX = (*data)[4];
+			Macro::playerY = (*data)[6] + 1;
+			//printf("%s %d\n", "playerX:", Macro::playerX);
+			//printf("%s %d\n", "playerY:", Macro::playerY);
+		}
+		if ((*data)[1] == 0x03) {
+			Macro::playerX = (*data)[4] - 1;
+			Macro::playerY = (*data)[6];
+			//printf("%s %d\n", "playerX:", Macro::playerX);
+			//printf("%s %d\n", "playerY:", Macro::playerY);
+		}
+	}
+
+	delete data;
+
+	ExitThread(0);
+	return 0;
+}
+
+void Client::Send_Packet_Hook_Callback()
+{
+	// if you want to see send packets, delete the remark below
+
+	ByteBuffer Packet((LPVOID)hooks->Outgoing_Packet_Pointer, hooks->Outgoing_Packet_Length);
+	std::vector<uint8_t> data = Packet.ReadBytes(0, hooks->Outgoing_Packet_Length);
+	/*std::stringstream result;
+	std::copy(data.begin(), data.end(), std::ostream_iterator<int>(result, " "));
+	std::string test = result.str();*/
+	//printf("Client is sending... : \n");
+	//printf("%zu: ", data.size()); // data.size() ï¿½ï¿½ï¿½
+	//for (int i = 0; i < data.size(); i++) {
+	//	printf("%02X ", data[i]);
+	//}
+	//printf("\n");
+	if (data.size() > 100)
+		return;
+	std::vector<uint8_t> dataCopy = data;
+	if (data[0] == 0x32 && hooks->Outgoing_Packet_Length == 8) 
+		CreateThread(NULL, 0, checkSendPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
+	else if (data[0] == 0x06 && hooks->Outgoing_Packet_Length == 16) 
+		CreateThread(NULL, 0, checkSendPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
+	else if (data[0] == 0x06 && hooks->Outgoing_Packet_Length == 20) 
+		CreateThread(NULL, 0, checkSendPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
+}
 
 void Client::Recv_Packet_Hook_Callback()
 {
@@ -342,10 +359,25 @@ void Client::Recv_Packet_Hook_Callback()
 	// get packets
 	ByteBuffer Packet((LPVOID)hooks->Ingoing_Packet_Pointer, hooks->Ingoing_Packet_Length);
 	std::vector<uint8_t> data = Packet.ReadBytes(0, hooks->Ingoing_Packet_Length);
-	if (data.size() > 500)
-		return;
 	std::vector<uint8_t> dataCopy = data;
-	CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
+	if (data.size() > 100)
+		return;
+	if (data[0] == 0x0C && data[4] == Macro::selectedPlayerId && hooks->Ingoing_Packet_Length == 12)
+		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
+	else if (data[0] == 0x11 && hooks->Ingoing_Packet_Length == 0x7)
+		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
+	else if (data[0] == 0x5 && hooks->Ingoing_Packet_Length == 0xd || data[0] == 0x11 && hooks->Ingoing_Packet_Length == 0x7)
+		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
+	else if (data[0] == 0x34 && data[hooks->Ingoing_Packet_Length - 1] == 0x00 && data[hooks->Ingoing_Packet_Length - 2] == 0x2e && data[hooks->Ingoing_Packet_Length - 3] == 0xdb && data[hooks->Ingoing_Packet_Length - 4] == 0xc0)
+		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
+	else if (data[0] == 0x29 && data[5] == 0x27) 
+		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
+	else if (data[0] == 0x29 && data[5] == 0x31) 
+		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
+	else if (data[0] == 0x29 && data[5] == 0x0D) 
+		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
+	else if (data[0] == 0x29 && data[5] == 0x16) 
+		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
 
 	//std::stringstream result;
 	//std::copy(data.begin(), data.end(), std::ostream_iterator<int>(result, " "));
@@ -354,18 +386,18 @@ void Client::Recv_Packet_Hook_Callback()
 	//int strLen = 0;
 	//char nameMsg[DEFAULT_BUFLEN];
 	//int y;
-	printf("Client is receiving... : \n");
-	printf("%zu: ", data.size()); // data.size() Ãâ·Â
-	for (int i = 0; i < data.size(); i++) {
-		printf("%02x ", data[i]);
-	}
-	printf("\n");
+	//printf("client is receiving... : \n");
+	//printf("%zu: ", data.size()); // data.size() ï¿½ï¿½ï¿½
+	//for (int i = 0; i < data.size(); i++) {
+	//	printf("%02x ", data[i]);
+	//}
+	//printf("\n");
 
 	//if (data[0] == 0x34 && data[1] == 0x00 && data[2] == 0x00 && data[3] == 0x00 && data[4] == 0x04) {
 	//	Macro::playerId = data[data.size() - 29];
 	//	printf("PlayerId :: %d\n", Macro::playerId);
 	//}
-	//// 3A 04 C0 FA C1 D6 00 00 00 B9 00 ÀúÁÖ
+	//// 3A 04 C0 FA C1 D6 00 00 00 B9 00 ï¿½ï¿½ï¿½ï¿½
 	//// 3a 04 c0 fa c1 d6 00 00 00 b9 00
 	//else if (data[0] == 0x3A && data[1] == 0x04 && data[2] == 0xC0 && data[3] == 0xFA && data[4] == 0xC1 && data[9] == 0xB9) {
 	//	printf("PlayerId :: %d\n", Macro::playerId);
@@ -384,4 +416,3 @@ void Client::Recv_Packet_Hook_Callback()
 	//	CreateThread(NULL, 0, curse, NULL, 0, NULL);
 	//}	
 }
-
