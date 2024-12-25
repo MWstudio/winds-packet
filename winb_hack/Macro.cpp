@@ -70,7 +70,7 @@ DWORD WINAPI Macro::startAttack(LPVOID lpParam) {
 	while (true) {
 		if (isAttack == 1)
 			attack();
-		Sleep(100);
+		Sleep(400);
 	}
 }
 
@@ -81,7 +81,7 @@ DWORD WINAPI Macro::startTransparency(LPVOID lpParam) {
 			Sleep(200);
 			shadowlessStep();
 		}
-		Sleep(100);
+		Sleep(300);
 	}
 }
 
