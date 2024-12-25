@@ -122,9 +122,7 @@ void say() {
 DWORD WINAPI Macro::startCycle(LPVOID lpParam) {
 	while (true) {
 		if (isCycle == 1) {
-			say();
 			cycle();
-
 		}
 		Sleep(200);
 	}
