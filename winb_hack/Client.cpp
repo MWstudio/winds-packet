@@ -190,7 +190,7 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 		}
 	}
 
-	// ���� 29 01 03 ?? unidque_id 0d 00
+	// 29 01 03 ?? unidque_id 0d 00
 	else if ((*data)[0] == 0x29 && (*data)[5] == 0x0D) {
 		if ((*data)[4] == Macro::selectedPlayerId) {
 			Macro::curseReceivedSelected = 1;  // Set the flag to true
@@ -332,8 +332,7 @@ void Client::Send_Packet_Hook_Callback()
 	//	printf("%02X ", data[i]);
 	//}
 	//printf("\n");
-	if (data.size() > 100)
-		return;
+	
 	std::vector<uint8_t> dataCopy = data;
 	if (data[0] == 0x32 && hooks->Outgoing_Packet_Length == 8) 
 		CreateThread(NULL, 0, checkSendPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
@@ -360,8 +359,7 @@ void Client::Recv_Packet_Hook_Callback()
 	ByteBuffer Packet((LPVOID)hooks->Ingoing_Packet_Pointer, hooks->Ingoing_Packet_Length);
 	std::vector<uint8_t> data = Packet.ReadBytes(0, hooks->Ingoing_Packet_Length);
 	std::vector<uint8_t> dataCopy = data;
-	if (data.size() > 100)
-		return;
+	
 	if (data[0] == 0x0C && data[4] == Macro::selectedPlayerId && hooks->Ingoing_Packet_Length == 12)
 		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
 	else if (data[0] == 0x11 && hooks->Ingoing_Packet_Length == 0x7)
@@ -386,12 +384,12 @@ void Client::Recv_Packet_Hook_Callback()
 	//int strLen = 0;
 	//char nameMsg[DEFAULT_BUFLEN];
 	//int y;
-	//printf("client is receiving... : \n");
-	//printf("%zu: ", data.size()); // data.size() ���
-	//for (int i = 0; i < data.size(); i++) {
-	//	printf("%02x ", data[i]);
-	//}
-	//printf("\n");
+	printf("client is receiving... : \n");
+	printf("%zu: ", data.size()); // data.size()
+	for (int i = 0; i < data.size(); i++) {
+		printf("%02x ", data[i]);
+	}
+	printf("\n");
 
 	//if (data[0] == 0x34 && data[1] == 0x00 && data[2] == 0x00 && data[3] == 0x00 && data[4] == 0x04) {
 	//	Macro::playerId = data[data.size() - 29];

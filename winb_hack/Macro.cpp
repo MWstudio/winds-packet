@@ -87,7 +87,7 @@ unsigned char* korStrToHex(const char* korStr) {
 
 void say() {
 	// 하드코딩된 문자열
-	const char* korStr = "ㅇㅇ";
+	const char* korStr = "나는 빠박이다";
 
 	unsigned char* hex = korStrToHex(korStr);
 	int length = strlen(korStr);
@@ -121,8 +121,11 @@ void say() {
 
 DWORD WINAPI Macro::startCycle(LPVOID lpParam) {
 	while (true) {
-		if (isCycle == 1)
+		if (isCycle == 1) {
+			say();
 			cycle();
+
+		}
 		Sleep(200);
 	}
 }
