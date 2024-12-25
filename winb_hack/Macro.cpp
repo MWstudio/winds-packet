@@ -33,7 +33,7 @@ unsigned short Macro::exorcismKey = 0;
 
 unsigned short Macro::isCycle = 0;
 unsigned short Macro::isDiamond = 0;
-
+unsigned int Macro::threadCount = 0;
 // INTERVAL_DATA structure for passing datas to thread
 typedef struct Data {
 	double msec;

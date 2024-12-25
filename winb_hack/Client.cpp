@@ -98,6 +98,8 @@ void necromancy(int playerId, int x, int y, int map1, int map2, int map3) {
 }
 
 DWORD WINAPI checkPacket(LPVOID lpParam) {
+	++Macro::threadCount;
+	printf("threadCount : %d\n", Macro::threadCount);
 	std::vector<uint8_t>* data = (std::vector<uint8_t>*)lpParam;
 	size_t dataSize = data->size();
 	// 0c 15 59 99 90 00 12 00 0d 02 a9 00
@@ -105,26 +107,26 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 		if ((*data)[9] == 0x00) {
 			Macro::selectedPlayerX = (*data)[6];
 			Macro::selectedPlayerY = (*data)[8] - 1;
-			//printf("%s %d\n", "playerX:", Macro::selectedPlayerX);
-			//printf("%s %d\n", "playerY:", Macro::selectedPlayerY);
+			printf("%s %d\n", "playerX:", Macro::selectedPlayerX);
+			printf("%s %d\n", "playerY:", Macro::selectedPlayerY);
 		}
 		if ((*data)[9] == 0x01) {
 			Macro::selectedPlayerX = (*data)[6] + 1;
 			Macro::selectedPlayerY = (*data)[8];
-			//printf("%s %d\n", "playerX:", Macro::selectedPlayerX);
-			//printf("%s %d\n", "playerY:", Macro::selectedPlayerY);
+			printf("%s %d\n", "playerX:", Macro::selectedPlayerX);
+			printf("%s %d\n", "playerY:", Macro::selectedPlayerY);
 		}
 		if ((*data)[9] == 0x02) {
 			Macro::selectedPlayerX = (*data)[6];
 			Macro::selectedPlayerY = (*data)[8] + 1;
-			//printf("%s %d\n", "playerX:", Macro::selectedPlayerX);
-			//printf("%s %d\n", "playerY:", Macro::selectedPlayerY);
+			printf("%s %d\n", "playerX:", Macro::selectedPlayerX);
+			printf("%s %d\n", "playerY:", Macro::selectedPlayerY);
 		}
 		if ((*data)[9] == 0x03) {
 			Macro::selectedPlayerX = (*data)[6] - 1;
 			Macro::selectedPlayerY = (*data)[8];
-			//printf("%s %d\n", "playerX:", Macro::selectedPlayerX);
-			//printf("%s %d\n", "playerY:", Macro::selectedPlayerY);
+			printf("%s %d\n", "playerX:", Macro::selectedPlayerX);
+			printf("%s %d\n", "playerY:", Macro::selectedPlayerY);
 		}
 	}
 	else if ((*data)[0] == 0x11 && dataSize == 0x7) {
@@ -138,14 +140,13 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 	}
 
 	//select player id
-	else if ((*data)[0] == 0x34 && (*data)[(*data).size() - 1] == 0x00 && (*data)[(*data).size() - 2] == 0x2e && (*data)[(*data).size() - 3] == 0xdb && (*data)[(*data).size() - 4] == 0xc0) {
+	else if ((*data)[0] == 0x34 && (*data)[(*data).size() - 2] == 0x2e && (*data)[(*data).size() - 3] == 0xdb && (*data)[(*data).size() - 4] == 0xc0) {
 		int id = 0;
-		for (size_t i = 0; i <= dataSize - 6; ++i) {
-			if ((*data)[i] == 0x01 && (*data)[i + 1] == 0x01 &&
-				(*data)[i + 2] == 0x00 && (*data)[i + 3] == 0x00 &&
-				(*data)[i + 4] == 0x00 && (*data)[i + 5] == 0x00) {
-				id = (*data)[i - 1];
-				break;
+		for (size_t i = 0; i <= dataSize - 4; ++i) {
+			if ((*data)[i] == 0x00 && (*data)[i + 1] == 0x00 &&
+				(*data)[i + 2] == 0x00 && (*data)[i + 3] == 0x00) {
+				// 가장 마지막 패턴을 찾기 위해 index를 계속 갱신
+				id = (i + 6 < dataSize) ? (*data)[i - 3] : 0;
 			}
 		}
 		if (Macro::playerId != id && id != 0) {
@@ -223,13 +224,16 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 		}
 	}
 
+	--Macro::threadCount;
+	printf("threadCount : %d\n", Macro::threadCount);
 	delete data;
-
 	ExitThread(0);
 	return 0;
 }
 
 DWORD WINAPI checkSendPacket(LPVOID lpParam) {
+	++Macro::threadCount;
+	printf("threadCount : %d\n", Macro::threadCount);
 	std::vector<uint8_t>* data = (std::vector<uint8_t>*)lpParam;
 	size_t dataSize = data->size();
 	if ((*data)[0] == 0x32 && dataSize == 8) {
@@ -311,8 +315,9 @@ DWORD WINAPI checkSendPacket(LPVOID lpParam) {
 		}
 	}
 
+	--Macro::threadCount;
+	printf("threadCount : %d\n", Macro::threadCount);
 	delete data;
-
 	ExitThread(0);
 	return 0;
 }
@@ -326,12 +331,12 @@ void Client::Send_Packet_Hook_Callback()
 	/*std::stringstream result;
 	std::copy(data.begin(), data.end(), std::ostream_iterator<int>(result, " "));
 	std::string test = result.str();*/
-	//printf("Client is sending... : \n");
-	//printf("%zu: ", data.size()); // data.size() ���
-	//for (int i = 0; i < data.size(); i++) {
-	//	printf("%02X ", data[i]);
-	//}
-	//printf("\n");
+	printf("Client is sending... : \n");
+	printf("%zu: ", data.size()); // data.size() ���
+	for (int i = 0; i < data.size(); i++) {
+		printf("%02X ", data[i]);
+	}
+	printf("\n");
 	
 	std::vector<uint8_t> dataCopy = data;
 	if (data[0] == 0x32 && hooks->Outgoing_Packet_Length == 8) 
@@ -366,7 +371,7 @@ void Client::Recv_Packet_Hook_Callback()
 		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
 	else if (data[0] == 0x5 && hooks->Ingoing_Packet_Length == 0xd || data[0] == 0x11 && hooks->Ingoing_Packet_Length == 0x7)
 		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
-	else if (data[0] == 0x34 && data[hooks->Ingoing_Packet_Length - 1] == 0x00 && data[hooks->Ingoing_Packet_Length - 2] == 0x2e && data[hooks->Ingoing_Packet_Length - 3] == 0xdb && data[hooks->Ingoing_Packet_Length - 4] == 0xc0)
+	else if (data[0] == 0x34 && data[hooks->Ingoing_Packet_Length - 2] == 0x2e && data[hooks->Ingoing_Packet_Length - 3] == 0xdb && data[hooks->Ingoing_Packet_Length - 4] == 0xc0)
 		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
 	else if (data[0] == 0x29 && data[5] == 0x27) 
 		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
