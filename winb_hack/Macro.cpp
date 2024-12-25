@@ -26,13 +26,11 @@ unsigned short Macro::necromancyReceivedSelected = 0;
 unsigned short Macro::curseReceivedMe = 0;
 unsigned short Macro::curseReceivedSelected = 0;
 
-unsigned short Macro::cycleKey = 0;
-unsigned short Macro::divorceKey = 0;
-unsigned short Macro::diamondKey = 0;
-unsigned short Macro::exorcismKey = 0;
+unsigned short Macro::transparencyKey = 0;
+unsigned short Macro::shadowlessStepKey = 0;
 
-unsigned short Macro::isCycle = 0;
-unsigned short Macro::isDiamond = 0;
+unsigned short Macro::isAttack = 0;
+unsigned short Macro::isTransparency = 0;
 
 // INTERVAL_DATA structure for passing datas to thread
 typedef struct Data {
@@ -54,91 +52,43 @@ Macro::~Macro()
 // 키 업데이트
 void Macro::updateSkillKey(const std::string& skillName, unsigned short& key) {
 	printf("Update Skill Key");
-	if (skillName == "cycle") {
-		Macro::cycleKey = key;
-		printf("%d Update cycle\n", Macro::cycleKey);
+	if (skillName == "transparency") {
+		Macro::transparencyKey = key;
+		printf("%d Update transparency\n", Macro::transparencyKey);
 	}
-	else if (skillName == "divorce") {
-		Macro::divorceKey = key;
-		printf("%d Update divorce\n", Macro::divorceKey);
+	else if (skillName == "shadowlessStep") {
+		Macro::shadowlessStepKey = key;
+		printf("%d Update shadowlessStep\n", Macro::shadowlessStepKey);
 	}
-	else if (skillName == "diamond") {
-		Macro::diamondKey = key;
-		printf("%d Update diamond\n", Macro::diamondKey);
-	}
-	else if (skillName == "exorcism") {
-		Macro::exorcismKey = key;
-		printf("%d Update exorcism\n", Macro::exorcismKey);
-	}
+
 	else {
 		printf("Unknown skill name: %s\n", skillName.c_str());
 	}
 }
-unsigned char* korStrToHex(const char* korStr) {
-	size_t charCount = strlen(korStr);
-	static unsigned char buffer[BUFSIZ] = { 0, };
 
-	for (size_t i = 0; i < charCount; i++) {
-		unsigned char cc = *((unsigned char*)korStr + i);
-		buffer[i] = cc;
-	}
-	return buffer;
-}
-
-void say() {
-	// 하드코딩된 문자열
-	const char* korStr = "ㅇㅇ";
-
-	unsigned char* hex = korStrToHex(korStr);
-	int length = strlen(korStr);
-	int i;
-	int size = length + 4;
-
-	// 패킷 초기화
-	char packet[100] = { 0xe, 0x0, 0x5, 0x2f, 0x0, };
-
-	// 문자열 길이를 패킷에 반영
-	packet[2] = length;
-	for (i = 3; i < length + 4; i++) {
-		packet[i] = hex[i - 3];
-	}
-
-	unsigned char sendpacket[100] = { "0", };
-
-	// 암호화 처리
-	Hooks::LoadEncrypt(packet, size, Hooks::encrypted);
-
-	sendpacket[0] = 0xAA;
-	sendpacket[1] = 0x00;
-	sendpacket[2] = size + 0x1;
-	for (int i = 3; i < size + 4; i++) {
-		sendpacket[i] = Hooks::encrypted[i - 3];
-	}
-
-	// 패킷 전송
-	send(Hooks::Con_Packet_Socket, (const char*)sendpacket, size + 4, 0);
-}
-
-DWORD WINAPI Macro::startCycle(LPVOID lpParam) {
+DWORD WINAPI Macro::startAttack(LPVOID lpParam) {
 	while (true) {
-		if (isCycle == 1)
-			cycle();
-		Sleep(200);
+		if (isAttack == 1)
+			attack();
+		Sleep(100);
 	}
 }
 
-DWORD WINAPI Macro::startDiamond(LPVOID lpParam) {
+DWORD WINAPI Macro::startTransparency(LPVOID lpParam) {
 	while (true) {
-		if (isDiamond == 1)
-			diamondBody();
-		Sleep(500);
+		if (isTransparency == 1) {
+			transparency();
+			Sleep(200);
+			shadowlessStep();
+		}
+		Sleep(100);
 	}
 }
 
-void Macro::cycle() { //순환 0F 0A 00
-	int size = 3;
-	char packet[3] = { 0x0F, 0x0A, 0x00 };
-	packet[1] = Macro::cycleKey;
+void Macro::attack() {
+	// 43 01 00 00 00 00 00
+	int size = 2;
+	char packet[2] = { 0x13, 0x00};
 	unsigned char sendpacket[100] = { "0", };
 	Hooks::LoadEncrypt(packet, size, Hooks::encrypted);
 	sendpacket[0] = 0xAA;
@@ -149,13 +99,25 @@ void Macro::cycle() { //순환 0F 0A 00
 
 
 	send(Hooks::Con_Packet_Socket, (const char*)sendpacket, size + 4, 0);
+	/*int size = 2;
+	char packet[2] = { 0x13, 0x00};
+	unsigned char sendpacket[100] = { "0", };
+	Hooks::LoadEncrypt(packet, size, Hooks::encrypted);
+	sendpacket[0] = 0xAA;
+	sendpacket[1] = 0x00;
+	sendpacket[2] = size + 0x1;
+	for (int i = 3; i < size + 4; i++)
+		sendpacket[i] = Hooks::encrypted[i - 3];
+
+
+	send(Hooks::Con_Packet_Socket, (const char*)sendpacket, size + 4, 0);*/
 
 }
 
-void Macro::diamondBody() { //금강불체 0F 06 00 
+void Macro::transparency() { //투명
 	int size = 3;
-	char packet[3] = { 0x0F, 0x06, 0x00 };
-	packet[1] = Macro::diamondKey;
+	char packet[3] = { 0x0F, 0x00, 0x00 };
+	packet[1] = Macro::transparencyKey;
 	unsigned char sendpacket[100] = { "0", };
 	Hooks::LoadEncrypt(packet, size, Hooks::encrypted);
 	sendpacket[0] = 0xAA;
@@ -168,6 +130,21 @@ void Macro::diamondBody() { //금강불체 0F 06 00
 	send(Hooks::Con_Packet_Socket, (const char*)sendpacket, size + 4, 0);
 }
 
+void Macro::shadowlessStep() { //무영보법
+	int size = 3;
+	char packet[3] = { 0x0F, 0x00, 0x00 };
+	packet[1] = Macro::shadowlessStepKey;
+	unsigned char sendpacket[100] = { "0", };
+	Hooks::LoadEncrypt(packet, size, Hooks::encrypted);
+	sendpacket[0] = 0xAA;
+	sendpacket[1] = 0x00;
+	sendpacket[2] = size + 0x1;
+	for (int i = 3; i < size + 4; i++)
+		sendpacket[i] = Hooks::encrypted[i - 3];
+
+
+	send(Hooks::Con_Packet_Socket, (const char*)sendpacket, size + 4, 0);
+}
 
 
 

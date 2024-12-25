@@ -14,13 +14,14 @@ public:
 	~Macro();
 
 	static HWND macroHWND;
-	static DWORD WINAPI startCycle(LPVOID lpParam);
-	static DWORD WINAPI startDiamond(LPVOID lpParam);
+	static DWORD WINAPI startAttack(LPVOID lpParam);
+	static DWORD WINAPI startTransparency(LPVOID lpParam);
 
-	static void cycle();
-	static void diamondBody();
+	static void attack();
+	static void transparency();
+	static void shadowlessStep();
 	static void updateSkillKey(const std::string& skillName, unsigned short& key);
-
+	static unsigned int threadCount;
 	static unsigned short playerId;
 	static unsigned short playerX, playerY;
 	static unsigned short selectedPlayerId;
@@ -32,12 +33,10 @@ public:
 	static unsigned short curseReceivedMe;
 	static unsigned short curseReceivedSelected;
 
-	static unsigned short cycleKey;
-	static unsigned short divorceKey;
-	static unsigned short diamondKey;
-	static unsigned short exorcismKey;
+	static unsigned short transparencyKey;
+	static unsigned short shadowlessStepKey;
 
-	static unsigned short isCycle;
-	static unsigned short isDiamond;
+	static unsigned short isAttack;
+	static unsigned short isTransparency;
 };
 

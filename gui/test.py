@@ -24,10 +24,8 @@ REVERSE_ALPHABET_MAP = {v: k for k, v in ALPHABET_MAP.items()}  # 1=a, ..., 52=Z
 
 # 스킬 이름과 영어 매핑
 SKILLS = {
-    "순환": "cycle",
-    "혼파술": "divorce",
-    "금강불체": "diamond",
-    "퇴마주": "exorcism"
+    "투명": "transparency",
+    "무영보법": "shadowlessStep",
 }
 
 # 이미 선택된 알파벳 추적
@@ -175,33 +173,33 @@ def send_message_to_dll(message):
     else:
         print("DLL not connected.")
 
-is_cycle_start = False
-is_diamond_start = False
+is_attack_start = False
+is_transparency_start = False
 # 글로벌 핫키 처리
-def handle_cycle():
-    global is_cycle_start
-    if is_cycle_start:
-        send_message_to_dll("stop cycle")
-        is_cycle_start = False
+def handle_attack():
+    global is_attack_start
+    if is_attack_start:
+        send_message_to_dll("stop attack")
+        is_attack_start = False
     else:
-        send_message_to_dll("start cycle")
-        is_cycle_start = True
+        send_message_to_dll("start attack")
+        is_attack_start = True
 
 
-def handle_diamond():
-    global is_diamond_start
-    if is_diamond_start:
-        send_message_to_dll("stop diamond")
-        is_diamond_start = False
+def handle_transparency():
+    global is_transparency_start
+    if is_transparency_start:
+        send_message_to_dll("stop transparency")
+        is_transparency_start = False
     else:
-        send_message_to_dll("start diamond")
-        is_diamond_start = True
+        send_message_to_dll("start transparency")
+        is_transparency_start = True
 
 
 def start_hotkey_listener():
     # 핫키를 등록
-    keyboard.add_hotkey('ctrl+1', handle_cycle)
-    keyboard.add_hotkey('ctrl+2', handle_diamond)
+    keyboard.add_hotkey('ctrl+1', handle_attack)
+    keyboard.add_hotkey('ctrl+2', handle_transparency)
 
     # 이벤트가 발생할 때까지 대기
     keyboard.wait()
@@ -248,11 +246,11 @@ def main():
     description_frame = tk.Frame(root)
     description_frame.pack(side="bottom", pady=20)
 
-    label_cycle = tk.Label(description_frame, text="순환 핫키 : 컨트롤 + 1", font=("Arial", 12))
-    label_cycle.pack()
+    label_attack = tk.Label(description_frame, text="공격 핫키 : 컨트롤 + 1", font=("Arial", 12))
+    label_attack.pack()
 
-    label_diamond = tk.Label(description_frame, text="금강 불체 : 컨트롤 + 2", font=("Arial", 12))
-    label_diamond.pack()
+    label_transparency = tk.Label(description_frame, text="투명+무영보법 : 컨트롤 + 2", font=("Arial", 12))
+    label_transparency.pack()
 
     global label_connect
     label_connect = tk.Label(description_frame, text="대기중", font=("Arial", 12))

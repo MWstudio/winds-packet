@@ -1,15 +1,10 @@
-﻿  Client.cpp
-C:\programming\winds-packet\winb_hack\Client.cpp(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+﻿  Macro.cpp
 C:\programming\winds-packet\winb_hack\Macro.h(10,3): warning C4091: 'static ': 변수를 선언하지 않으면 'Macro::Point' 왼쪽은 무시됩니다.
-C:\programming\winds-packet\winb_hack\Client.cpp(41,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\programming\winds-packet\winb_hack\Client.cpp(76,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Macro.cpp
-C:\programming\winds-packet\winb_hack\Macro.h(10,3): warning C4091: 'static ': 변수를 선언하지 않으면 'Macro::Point' 왼쪽은 무시됩니다.
-C:\programming\winds-packet\winb_hack\Macro.cpp(141,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\programming\winds-packet\winb_hack\Macro.cpp(158,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\programming\winds-packet\winb_hack\Macro.cpp(120,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\programming\winds-packet\winb_hack\Macro.cpp(136,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   코드를 생성하고 있습니다.
-  6 of 244 functions ( 2.5%) were compiled, the rest were copied from previous compilation.
+  4 of 229 functions ( 1.7%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    2 functions had inline decision re-evaluated but remain unchanged
+    3 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   winb_hack.vcxproj -> C:\programming\winds-packet\Release\winb_hack.dll
