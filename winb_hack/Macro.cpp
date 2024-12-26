@@ -70,7 +70,7 @@ DWORD WINAPI Macro::startAttack(LPVOID lpParam) {
 	while (true) {
 		if (isAttack == 1)
 			attack();
-		Sleep(200);
+		Sleep(100);
 	}
 }
 
