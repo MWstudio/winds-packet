@@ -351,7 +351,7 @@ void Client::Send_Packet_Hook_Callback()
 void Client::Recv_Packet_Hook_Callback()
 {
 	// get HWND for winbaram.exe
-	ByteBuffer HWND_Packet((LPVOID)0x0019FC8C, 4);
+	ByteBuffer HWND_Packet((LPVOID)0x0055DC3C, 4);
 	std::vector<uint8_t> HWND_data = HWND_Packet.ReadBytes(0, 4);
 	unsigned char copied[4] = { "0", };
 	int x;
@@ -361,6 +361,7 @@ void Client::Recv_Packet_Hook_Callback()
 	std::memcpy(&x, copied, 4);
 	Macro::macroHWND = (HWND)x;
 
+	//Macro::consoleshowtext("packet receive!!");
 	// get packets
 	ByteBuffer Packet((LPVOID)hooks->Ingoing_Packet_Pointer, hooks->Ingoing_Packet_Length);
 	std::vector<uint8_t> data = Packet.ReadBytes(0, hooks->Ingoing_Packet_Length);
@@ -376,7 +377,6 @@ void Client::Recv_Packet_Hook_Callback()
 		data[12] = 0x00;
 		std::memcpy((LPVOID)hooks->Ingoing_Packet_Pointer, data.data(), data.size());
 	}*/
-
 	if (data[0] == 0x0C && data[4] == Macro::selectedPlayerId && hooks->Ingoing_Packet_Length == 12)
 		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
 	else if (data[0] == 0x11 && hooks->Ingoing_Packet_Length == 0x7)

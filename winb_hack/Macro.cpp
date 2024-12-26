@@ -84,7 +84,6 @@ unsigned char* korStrToHex(const char* korStr) {
 	}
 	return buffer;
 }
-
 void say() {
 	// 하드코딩된 문자열
 	const char* korStr = "나는 빠박이다";
@@ -117,6 +116,26 @@ void say() {
 
 	// 패킷 전송
 	send(Hooks::Con_Packet_Socket, (const char*)sendpacket, size + 4, 0);
+}
+void Macro::consoleshowtext(const char* korStr) {
+	static unsigned char text[BUFSIZ] = { 0, };
+	unsigned char* hex = korStrToHex(korStr);
+	int length = strlen(korStr);
+	int i;
+
+	text[0] = 0x0A;
+	text[1] = 0x00;
+	text[2] = 0x00;
+	text[3] = length + 1;
+
+	for (i = 4; i < length + 5; i++)
+		text[i] = hex[i - 4];
+	text[i] = 0x00;
+
+	HWND hwnd = (HWND)0x00071750;
+	//PostMessage(hwnd, WM_USER + 3, (WPARAM)text, length + 6);
+	PostMessage(Macro::macroHWND, WM_USER + 3, (WPARAM)text, length + 6);
+
 }
 
 DWORD WINAPI Macro::startCycle(LPVOID lpParam) {

@@ -16,7 +16,7 @@ public:
 	static HWND macroHWND;
 	static DWORD WINAPI startCycle(LPVOID lpParam);
 	static DWORD WINAPI startDiamond(LPVOID lpParam);
-
+	static void consoleshowtext(const char* korStr);
 	static void cycle();
 	static void diamondBody();
 	static void updateSkillKey(const std::string& skillName, unsigned short& key);

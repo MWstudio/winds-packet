@@ -8,6 +8,6 @@ C:\programming\winds-packet\winb_hack\Client.cpp(415,20): warning C4018: '<': si
   코드를 생성하고 있습니다.
   2 of 244 functions ( 0.8%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    7 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   winb_hack.vcxproj -> C:\programming\winds-packet\Release\winb_hack.dll
