@@ -149,6 +149,7 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 				id = (i + 6 < dataSize) ? (*data)[i - 3] : 0;
 			}
 		}
+		printf("My:%d, selected:%d", Macro::playerId, id);
 		if (Macro::playerId != id && id != 0) {
 			Macro::selectedPlayerId = id;
 			printf("selectedPlayerId :: %d\n", Macro::selectedPlayerId);
@@ -337,7 +338,7 @@ void Client::Send_Packet_Hook_Callback()
 		printf("%02X ", data[i]);
 	}
 	printf("\n");
-	
+
 	std::vector<uint8_t> dataCopy = data;
 	if (data[0] == 0x32 && hooks->Outgoing_Packet_Length == 8) 
 		CreateThread(NULL, 0, checkSendPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
@@ -365,6 +366,17 @@ void Client::Recv_Packet_Hook_Callback()
 	std::vector<uint8_t> data = Packet.ReadBytes(0, hooks->Ingoing_Packet_Length);
 	std::vector<uint8_t> dataCopy = data;
 	
+	//1d 01 03 2a a1 00 00 02 00 59 00 63 00 00 15 00 0c 00 04 04 bc db c6 c8 00
+	/*if (data[0] == 0x1d && data[7] == 0x02 && data.size() == 25) {
+		data[7] = 0x00;
+		std::memcpy((LPVOID)hooks->Ingoing_Packet_Pointer, data.data(), data.size());
+	}
+
+	if (data[0] == 0x33 && data[12] == 0x02 && data.size() == 30) {
+		data[12] = 0x00;
+		std::memcpy((LPVOID)hooks->Ingoing_Packet_Pointer, data.data(), data.size());
+	}*/
+
 	if (data[0] == 0x0C && data[4] == Macro::selectedPlayerId && hooks->Ingoing_Packet_Length == 12)
 		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
 	else if (data[0] == 0x11 && hooks->Ingoing_Packet_Length == 0x7)
@@ -373,14 +385,23 @@ void Client::Recv_Packet_Hook_Callback()
 		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
 	else if (data[0] == 0x34 && data[hooks->Ingoing_Packet_Length - 2] == 0x2e && data[hooks->Ingoing_Packet_Length - 3] == 0xdb && data[hooks->Ingoing_Packet_Length - 4] == 0xc0)
 		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
-	else if (data[0] == 0x29 && data[5] == 0x27) 
-		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
-	else if (data[0] == 0x29 && data[5] == 0x31) 
-		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
-	else if (data[0] == 0x29 && data[5] == 0x0D) 
-		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
-	else if (data[0] == 0x29 && data[5] == 0x16) 
-		CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
+	else if (data[0] == 0x29 && data[5] == 0x27) {
+		if (data[4] == Macro::selectedPlayerId || data[4] == Macro::playerId)
+			CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
+	}
+	else if (data[0] == 0x29 && data[5] == 0x31) {
+		if (data[4] == Macro::selectedPlayerId || data[4] == Macro::playerId)
+			CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
+	}
+	else if (data[0] == 0x29 && data[5] == 0x0D) {
+		if (data[4] == Macro::selectedPlayerId || data[4] == Macro::playerId)
+			CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
+
+	}
+	else if (data[0] == 0x29 && data[5] == 0x16) {
+		if (data[4] == Macro::selectedPlayerId || data[4] == Macro::playerId)
+			CreateThread(NULL, 0, checkPacket, new std::vector<uint8_t>(dataCopy), 0, NULL);
+	}
 
 	//std::stringstream result;
 	//std::copy(data.begin(), data.end(), std::ostream_iterator<int>(result, " "));
