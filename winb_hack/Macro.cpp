@@ -4,7 +4,7 @@
 #include "Macro.h"
 #include "Hooks.h"
 #include "process.h"
-#include <shlobj.h> // SHGetFolderPath ÇÔ¼ö
+#include <shlobj.h> // SHGetFolderPath ï¿½Ô¼ï¿½
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -49,7 +49,7 @@ Macro::~Macro()
 {
 }
 
-// Å° ¾÷µ¥ÀÌÆ®
+// Å° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 void Macro::updateSkillKey(const std::string& skillName, unsigned short& key) {
 	printf("Update Skill Key");
 	if (skillName == "transparency") {
@@ -85,6 +85,33 @@ DWORD WINAPI Macro::startTransparency(LPVOID lpParam) {
 	}
 }
 
+unsigned char* korStrToHex(const char* korStr) {
+	size_t charCount = strlen(korStr);
+	static unsigned char buffer[BUFSIZ] = { 0, };
+
+	for (size_t i = 0; i < charCount; i++) {
+		unsigned char cc = *((unsigned char*)korStr + i);
+		buffer[i] = cc;
+	}
+	return buffer;
+}
+
+void Macro::consoleshowtext(const char* korStr) {
+	static unsigned char text[BUFSIZ] = { 0, };
+	unsigned char* hex = korStrToHex(korStr);
+	int length = strlen(korStr);
+	int i;
+	text[0] = 0x0A;
+	text[1] = 0x00;
+	text[2] = 0x00;
+	text[3] = length + 1;
+	for (i = 4; i < length + 5; i++)
+		text[i] = hex[i - 4];
+	text[i] = 0x00;
+	//PostMessage(hwnd, WM_USER + 3, (WPARAM)text, length + 6);
+	PostMessage(Macro::macroHWND, WM_USER + 3, (WPARAM)text, length + 6);
+}
+
 void Macro::attack() {
 	// 43 01 00 00 00 00 00
 	int size = 2;
@@ -114,7 +141,7 @@ void Macro::attack() {
 
 }
 
-void Macro::transparency() { //Åõ¸í
+void Macro::transparency() { //ï¿½ï¿½ï¿½ï¿½
 	int size = 3;
 	char packet[3] = { 0x0F, 0x00, 0x00 };
 	packet[1] = Macro::transparencyKey;
@@ -130,7 +157,7 @@ void Macro::transparency() { //Åõ¸í
 	send(Hooks::Con_Packet_Socket, (const char*)sendpacket, size + 4, 0);
 }
 
-void Macro::shadowlessStep() { //¹«¿µº¸¹ý
+void Macro::shadowlessStep() { //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	int size = 3;
 	char packet[3] = { 0x0F, 0x00, 0x00 };
 	packet[1] = Macro::shadowlessStepKey;

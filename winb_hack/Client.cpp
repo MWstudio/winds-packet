@@ -50,7 +50,7 @@ void Client::Send_Packet_Hook_Callback()
 void Client::Recv_Packet_Hook_Callback()
 {
 	// get HWND for winbaram.exe
-	ByteBuffer HWND_Packet((LPVOID)0x0019FC8C, 4);
+	ByteBuffer HWND_Packet((LPVOID)0x0055DC3C, 4);
 	std::vector<uint8_t> HWND_data = HWND_Packet.ReadBytes(0, 4);
 	unsigned char copied[4] = { "0", };
 	int x;
@@ -71,6 +71,19 @@ void Client::Recv_Packet_Hook_Callback()
 	//int strLen = 0;
 	//char nameMsg[DEFAULT_BUFLEN];
 	//int y;
+	
+	//투명 무시
+	if (data[0] == 0x1d && data[7] == 0x02 && data.size() == 25) {
+		data[7] = 0x00;
+		std::memcpy((LPVOID)hooks->Ingoing_Packet_Pointer, data.data(), data.size());
+		Macro::consoleshowtext("투명 무시 작동");
+	}
+
+	if (data[0] == 0x33 && data[12] == 0x02 && data.size() == 30) {
+		data[12] = 0x00;
+		std::memcpy((LPVOID)hooks->Ingoing_Packet_Pointer, data.data(), data.size());
+		Macro::consoleshowtext("투명 무시 작동");
+	}
 	printf("client is receiving... : \n");
 	printf("%zu: ", data.size());
 	for (int i = 0; i < data.size(); i++) {

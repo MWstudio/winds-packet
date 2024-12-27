@@ -16,7 +16,7 @@ public:
 	static HWND macroHWND;
 	static DWORD WINAPI startAttack(LPVOID lpParam);
 	static DWORD WINAPI startTransparency(LPVOID lpParam);
-
+	static void consoleshowtext(const char* korStr);
 	static void attack();
 	static void transparency();
 	static void shadowlessStep();
