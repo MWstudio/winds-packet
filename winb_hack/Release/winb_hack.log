@@ -1,13 +1,61 @@
-﻿  Client.cpp
-C:\programming\winds-packet\winb_hack\Client.cpp(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
-C:\programming\winds-packet\winb_hack\Macro.h(10,3): warning C4091: 'static ': 변수를 선언하지 않으면 'Macro::Point' 왼쪽은 무시됩니다.
-C:\programming\winds-packet\winb_hack\Client.cpp(41,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\programming\winds-packet\winb_hack\Client.cpp(76,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\programming\winds-packet\winb_hack\Client.cpp(337,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\programming\winds-packet\winb_hack\Client.cpp(415,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+﻿  ASM.cpp
+  bytebuffer.cpp
+  Client.cpp
+C:\Github\winds-packet\winb_hack\Client.cpp(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+C:\Github\winds-packet\winb_hack\Macro.h(10,3): warning C4091: 'static ': 변수를 선언하지 않으면 'Macro::Point' 왼쪽은 무시됩니다.
+  (소스 파일 '/Client.cpp'을(를) 컴파일하는 중)
+  
+C:\Github\winds-packet\winb_hack\Client.cpp(41,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Client.cpp'을(를) 컴파일하는 중)
+  
+C:\Github\winds-packet\winb_hack\Client.cpp(76,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Client.cpp'을(를) 컴파일하는 중)
+  
+C:\Github\winds-packet\winb_hack\Client.cpp(338,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  (소스 파일 '/Client.cpp'을(를) 컴파일하는 중)
+  
+C:\Github\winds-packet\winb_hack\Client.cpp(416,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  (소스 파일 '/Client.cpp'을(를) 컴파일하는 중)
+  
+  Macro.cpp
+C:\Github\winds-packet\winb_hack\Macro.h(10,3): warning C4091: 'static ': 변수를 선언하지 않으면 'Macro::Point' 왼쪽은 무시됩니다.
+  (소스 파일 '/Macro.cpp'을(를) 컴파일하는 중)
+  
+C:\Github\winds-packet\winb_hack\Macro.cpp(161,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Macro.cpp'을(를) 컴파일하는 중)
+  
+C:\Github\winds-packet\winb_hack\Macro.cpp(178,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Macro.cpp'을(를) 컴파일하는 중)
+  
+  winb_hack.cpp
+  dllmain.cpp
+C:\Github\winds-packet\winb_hack\dllmain.cpp(2,1): warning C4603: '_WINSOCK_DEPRECATED_NO_WARNINGS': 매크로가 정의되지 않았거나 미리 컴파일된 헤더 사용 후와 정의가 다릅니다.
+  (소스 파일 '/dllmain.cpp'을(를) 컴파일하는 중)
+  C:\Github\winds-packet\winb_hack\dllmain.cpp(2,1):
+  여기에서 정의하지 않고 미리 컴파일된 헤더에 매크로 추가
+  C:\Github\winds-packet\winb_hack\dllmain.cpp(6,1):
+  미리 컴파일된 헤더 사용
+  
+C:\Github\winds-packet\winb_hack\dllmain.cpp(3,1): warning C4603: '_CRT_SECURE_NO_WARNINGS': 매크로가 정의되지 않았거나 미리 컴파일된 헤더 사용 후와 정의가 다릅니다.
+  (소스 파일 '/dllmain.cpp'을(를) 컴파일하는 중)
+  C:\Github\winds-packet\winb_hack\dllmain.cpp(3,1):
+  여기에서 정의하지 않고 미리 컴파일된 헤더에 매크로 추가
+  C:\Github\winds-packet\winb_hack\dllmain.cpp(6,1):
+  미리 컴파일된 헤더 사용
+  
+C:\Github\winds-packet\winb_hack\Macro.h(10,3): warning C4091: 'static ': 변수를 선언하지 않으면 'Macro::Point' 왼쪽은 무시됩니다.
+  (소스 파일 '/dllmain.cpp'을(를) 컴파일하는 중)
+  
+C:\Github\winds-packet\winb_hack\dllmain.cpp(315,7): warning C4101: 'nameMsg' :참조되지 않은 지역 변수입니다.
+  (소스 파일 '/dllmain.cpp'을(를) 컴파일하는 중)
+  
+  Hooks.cpp
+C:\Github\winds-packet\winb_hack\Hooks.cpp(31,2): warning C4102: 'Winbaram_004A8290': 참조되지 않은 레이블입니다.
+  (소스 파일 '/Hooks.cpp'을(를) 컴파일하는 중)
+  
+  Properties.cpp
   코드를 생성하고 있습니다.
-  2 of 244 functions ( 0.8%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB was built with incompatible compiler, fall back to full compilation.
+  All 249 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   코드를 생성했습니다.
-  winb_hack.vcxproj -> C:\programming\winds-packet\Release\winb_hack.dll
+  winb_hack.vcxproj -> C:\Github\winds-packet\Release\winb_hack.dll

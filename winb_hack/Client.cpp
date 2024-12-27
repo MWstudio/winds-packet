@@ -149,10 +149,11 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 				id = (i + 6 < dataSize) ? (*data)[i - 3] : 0;
 			}
 		}
-		printf("My:%d, selected:%d", Macro::playerId, id);
+		
 		if (Macro::playerId != id && id != 0) {
 			Macro::selectedPlayerId = id;
-			printf("selectedPlayerId :: %d\n", Macro::selectedPlayerId);
+			//printf("selectedPlayerId :: %d\n", Macro::selectedPlayerId);
+			Macro::consoleshowtext("[Player Selected]");
 		}
 	}
 	// 29 3a 75 a3 78 0d 00
