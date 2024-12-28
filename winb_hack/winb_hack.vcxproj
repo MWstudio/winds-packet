@@ -170,6 +170,7 @@
     <ClCompile Include="bytebuffer.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Macro.cpp" />
+    <ClCompile Include="threadpool.cpp" />
     <ClCompile Include="winb_hack.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Hooks.cpp" />

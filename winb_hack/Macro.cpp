@@ -132,8 +132,6 @@ void Macro::consoleshowtext(const char* korStr) {
 		text[i] = hex[i - 4];
 	text[i] = 0x00;
 
-	HWND hwnd = (HWND)0x00071750;
-	//PostMessage(hwnd, WM_USER + 3, (WPARAM)text, length + 6);
 	PostMessage(Macro::macroHWND, WM_USER + 3, (WPARAM)text, length + 6);
 
 }

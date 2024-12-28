@@ -2,6 +2,7 @@ C:\Github\winds-packet\winb_hack\ASM.cpp;C:\Github\winds-packet\winb_hack\Releas
 C:\Github\winds-packet\winb_hack\bytebuffer.cpp;C:\Github\winds-packet\winb_hack\Release\bytebuffer.obj
 C:\Github\winds-packet\winb_hack\Client.cpp;C:\Github\winds-packet\winb_hack\Release\Client.obj
 C:\Github\winds-packet\winb_hack\Macro.cpp;C:\Github\winds-packet\winb_hack\Release\Macro.obj
+C:\Github\winds-packet\winb_hack\threadpool.cpp;C:\Github\winds-packet\winb_hack\Release\threadpool.obj
 C:\Github\winds-packet\winb_hack\winb_hack.cpp;C:\Github\winds-packet\winb_hack\Release\winb_hack.obj
 C:\Github\winds-packet\winb_hack\dllmain.cpp;C:\Github\winds-packet\winb_hack\Release\dllmain.obj
 C:\Github\winds-packet\winb_hack\Hooks.cpp;C:\Github\winds-packet\winb_hack\Release\Hooks.obj
