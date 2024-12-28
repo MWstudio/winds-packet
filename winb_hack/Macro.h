@@ -39,6 +39,6 @@ public:
 
 	static unsigned short isCycle;
 	static unsigned short isDiamond;
-	static unsigned int threadCount;
+	static unsigned int isCtrl;
 };
 

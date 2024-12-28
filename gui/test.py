@@ -6,9 +6,7 @@ import time
 import tkinter as tk
 from tkinter import ttk
 import configparser
-from pynput import keyboard
 import subprocess
-import keyboard
 
 if getattr(sys, "frozen", False):
     program_directory = os.path.dirname(os.path.abspath(sys.executable))
@@ -162,6 +160,8 @@ def handle_dll_connection(socket):
             break
     client_socket = None
     socket.close()
+    print("Socket connection closed. Exiting program.")
+    sys.exit()  # 프로그램 종료
 
 # DLL로 메시지 전송
 def send_message_to_dll(message):
@@ -175,37 +175,6 @@ def send_message_to_dll(message):
     else:
         print("DLL not connected.")
 
-is_cycle_start = False
-is_diamond_start = False
-# 글로벌 핫키 처리
-def handle_cycle():
-    global is_cycle_start
-    if is_cycle_start:
-        send_message_to_dll("stop cycle")
-        is_cycle_start = False
-    else:
-        send_message_to_dll("start cycle")
-        is_cycle_start = True
-
-
-def handle_diamond():
-    global is_diamond_start
-    if is_diamond_start:
-        send_message_to_dll("stop diamond")
-        is_diamond_start = False
-    else:
-        send_message_to_dll("start diamond")
-        is_diamond_start = True
-
-
-def start_hotkey_listener():
-    # 핫키를 등록
-    keyboard.add_hotkey('ctrl+1', handle_cycle)
-    keyboard.add_hotkey('ctrl+2', handle_diamond)
-
-    # 이벤트가 발생할 때까지 대기
-    keyboard.wait()
-
 # Tkinter GUI 생성
 def main():
     # 설정 로드
@@ -214,8 +183,6 @@ def main():
 
     # 소켓 서버 스레드 시작
     threading.Thread(target=start_server, daemon=True).start()
-    # 핫키 리스너 시작
-    threading.Thread(target=start_hotkey_listener, daemon=True).start()
 
     # Tkinter GUI 시작
     root = tk.Tk()
@@ -283,7 +250,6 @@ def run_injector(exe_path, process_name, dll1_path):
         print(f"Error executing command: {e}")
     except FileNotFoundError:
         print("The specified executable could not be found.")
-
 
 
 def update_connect_status(status):

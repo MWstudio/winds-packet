@@ -68,6 +68,9 @@
     <ClCompile Include="Macro.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="threadpool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="test.lua">
