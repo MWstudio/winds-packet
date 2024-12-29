@@ -19,10 +19,12 @@ public:
 	static void consoleshowtext(const char* korStr);
 	static void cycle();
 	static void diamondBody();
+	static void test();
 	static void updateSkillKey(const std::string& skillName, unsigned short& key);
 
 	static unsigned short playerId;
 	static unsigned short playerX, playerY;
+	static unsigned short mobX, mobY;
 	static unsigned short selectedPlayerId;
 	static unsigned short selectedPlayerX, selectedPlayerY;
 	static unsigned short map1, map2, map3;

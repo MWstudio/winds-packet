@@ -16,6 +16,7 @@ HWND Macro::macroHWND = NULL;
 
 unsigned short Macro::selectedPlayerId = 0;
 unsigned short Macro::playerX = 0, Macro::playerY = 0;
+unsigned short Macro::mobX = 0, Macro::mobY = 0;
 unsigned short Macro::playerId = 0;
 unsigned short Macro::selectedPlayerX = 0, Macro::selectedPlayerY = 0;
 unsigned short Macro::map1 = 0, Macro::map2 = 0, Macro::map3;
@@ -87,7 +88,7 @@ unsigned char* korStrToHex(const char* korStr) {
 }
 void say() {
 	// 하드코딩된 문자열
-	const char* korStr = "나는 빠박이다";
+	const char* korStr = "나는빠박이다";
 
 	unsigned char* hex = korStrToHex(korStr);
 	int length = strlen(korStr);
@@ -118,12 +119,17 @@ void say() {
 	// 패킷 전송
 	send(Hooks::Con_Packet_Socket, (const char*)sendpacket, size + 4, 0);
 }
+
+void Macro::test() {
+	consoleshowtext("나는 빡빡이다");
+}
+
+
 void Macro::consoleshowtext(const char* korStr) {
 	static unsigned char text[BUFSIZ] = { 0, };
 	unsigned char* hex = korStrToHex(korStr);
 	int length = strlen(korStr);
 	int i;
-
 	text[0] = 0x0A;
 	text[1] = 0x00;
 	text[2] = 0x00;
@@ -133,10 +139,7 @@ void Macro::consoleshowtext(const char* korStr) {
 		text[i] = hex[i - 4];
 	text[i] = 0x00;
 
-	HWND hwnd = (HWND)0x00071750;
-	//PostMessage(hwnd, WM_USER + 3, (WPARAM)text, length + 6);
 	PostMessage(Macro::macroHWND, WM_USER + 3, (WPARAM)text, length + 6);
-
 }
 
 DWORD WINAPI Macro::startCycle(LPVOID lpParam) {

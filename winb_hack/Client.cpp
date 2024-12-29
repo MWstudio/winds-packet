@@ -9,7 +9,7 @@
 #define REACHABLE_X_DIST 3
 #define REACHABLE_Y_DIST 3 
 #define MAX_SAME_POS 3
-ThreadPool pool(10); // ìŠ¤ë ˆë“œí’€ ìƒì„±
+ThreadPool pool(10); // ½º·¹µåÇ® »ı¼º
 
 Client::Client()
 {
@@ -29,7 +29,7 @@ void Client::Con_Packet_Hook_Callback()
 }
 
 void curse(int playerId, int x, int y, int map1, int map2, int map3) {
-	// 0F 0D 01 03 2A 22 00 07 00 08 00 ï¿½ï¿½
+	// 0F 0D 01 03 2A 22 00 07 00 08 00   
 	if (x == 0 && y == 0) {
 		return;
 	}
@@ -63,7 +63,7 @@ void curse(int playerId, int x, int y, int map1, int map2, int map3) {
 }
 
 void necromancy(int playerId, int x, int y, int map1, int map2, int map3) {
-	// 0F 08 01 03 2A 22 00 07 00 08 00 ï¿½ï¿½È¥  
+	// 0F 08 01 03 2A 22 00 07 00 08 00   ?  
 	// 0F 08 01 03 2B 14 00 09 00 0A 00
 	// 0F 08 0D 4A 9E AA 00 06 00 06 00
 	if (x == 0 && y == 0) {
@@ -144,7 +144,7 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 		for (size_t i = 0; i <= dataSize - 4; ++i) {
 			if ((*data)[i] == 0x00 && (*data)[i + 1] == 0x00 &&
 				(*data)[i + 2] == 0x00 && (*data)[i + 3] == 0x00) {
-				// ê°€ì¥ ë§ˆì§€ë§‰ íŒ¨í„´ì„ ì°¾ê¸° ìœ„í•´ indexë¥¼ ê³„ì† ê°±ì‹ 
+				// °¡Àå ¸¶Áö¸· ÆĞÅÏÀ» Ã£±â À§ÇØ index¸¦ °è¼Ó °»½Å
 				id = (i + 6 < dataSize) ? (*data)[i - 3] : 0;
 			}
 		}
@@ -152,14 +152,14 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 		if (Macro::playerId != id && id != 0) {
 			Macro::selectedPlayerId = id;
 			printf("selectedPlayerId :: %d\n", Macro::selectedPlayerId);
-			Macro::consoleshowtext("[Player Selected]");
+			Macro::consoleshowtext("ÇÃ·¹ÀÌ¾î ÁöÁ¤ ¿Ï·á");
 		}
 	}
 	// 29 3a 75 a3 78 0d 00
 	// 29 3a 75 a3 78 31 00
 	// 29 01 03 2b 49 31 00
 	// 
-	// È¥ï¿½ï¿½ 29 ?? ?? ?? unidque_id 27 00
+	// ?   29 ?? ?? ?? unidque_id 27 00
 	else if ((*data)[0] == 0x29 && (*data)[5] == 0x27) {
 		if ((*data)[4] == Macro::selectedPlayerId) {
 			Macro::necromancyReceivedSelected = 1;  // Set the flag to true
@@ -325,12 +325,11 @@ void Client::Send_Packet_Hook_Callback()
 	std::copy(data.begin(), data.end(), std::ostream_iterator<int>(result, " "));
 	std::string test = result.str();*/
 	printf("Client is sending... : \n");
-	printf("%zu: ", data.size()); // data.size() ï¿½ï¿½ï¿½
+	printf("%zu: ", data.size()); // data.size()    
 	for (int i = 0; i < data.size(); i++) {
 		printf("%02X ", data[i]);
 	}
 	printf("\n");
-
 	std::vector<uint8_t> dataCopy = data;
 	if (data[0] == 0x32 && hooks->Outgoing_Packet_Length == 8) 
 		pool.enqueue(checkSendPacket, new std::vector<uint8_t>(dataCopy));
@@ -359,6 +358,11 @@ void Client::Recv_Packet_Hook_Callback()
 	std::vector<uint8_t> data = Packet.ReadBytes(0, hooks->Ingoing_Packet_Length);
 	std::vector<uint8_t> dataCopy = data;
 	
+	/*if (data[0] == 0x08 && hooks->Ingoing_Packet_Length == 49) {
+		data[8] = 90;	
+		std::memcpy((LPVOID)hooks->Ingoing_Packet_Pointer, data.data(), data.size());
+	}*/
+
 	//1d 01 03 2a a1 00 00 02 00 59 00 63 00 00 15 00 0c 00 04 04 bc db c6 c8 00
 	/*if (data[0] == 0x1d && data[7] == 0x02 && data.size() == 25) {
 		data[7] = 0x00;
@@ -369,6 +373,7 @@ void Client::Recv_Packet_Hook_Callback()
 		data[12] = 0x00;
 		std::memcpy((LPVOID)hooks->Ingoing_Packet_Pointer, data.data(), data.size());
 	}*/
+
 	if (data[0] == 0x0C && data[4] == Macro::selectedPlayerId && hooks->Ingoing_Packet_Length == 12) {
 		pool.enqueue(checkPacket, new std::vector<uint8_t>(dataCopy));
 	}
