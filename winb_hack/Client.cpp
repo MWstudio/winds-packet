@@ -9,7 +9,7 @@
 #define REACHABLE_X_DIST 3
 #define REACHABLE_Y_DIST 3 
 #define MAX_SAME_POS 3
-
+ThreadPool pool(10); // ½º·¹µåÇ® »ı¼º
 Client::Client()
 {
 	
@@ -26,8 +26,18 @@ void Client::Con_Packet_Hook_Callback()
 	printf("---- %x\n", hooks->Con_Packet_Return_Address);
 	printf("----Socket: %x\n", hooks->Con_Packet_Socket);
 }
-// ìŠ¤ë ˆë“œ ìˆ˜ë¥¼ ê´€ë¦¬í•˜ëŠ” ì›ìì  ë³€ìˆ˜
 
+int j = 0;
+DWORD WINAPI trans_loop(LPVOID lpParam) {
+	if (j == 1) return 0;
+	for (int i = 0; i < 5; i++) {
+		j = 1;
+		Macro::transparency();
+		Sleep(200);
+	}
+	j = 0;
+	return 0;
+}
 
 void Client::Send_Packet_Hook_Callback()
 {
@@ -47,6 +57,22 @@ void Client::Send_Packet_Hook_Callback()
 	printf("\n");
 }
 
+
+DWORD WINAPI checkPacket(LPVOID lpParam) {
+	std::vector<uint8_t>* data = (std::vector<uint8_t>*)lpParam;
+	size_t dataSize = data->size();
+	if ((*data)[0] == 0x5 && dataSize == 0xd || (*data)[0] == 0x11 && dataSize == 0x7) {
+		Macro::playerId = (*data)[4];
+	}
+	else if ((*data)[0] == 0x1d && (*data)[7] == 0x00 && (*data).size() == 25) {
+		Macro::transparency();
+		Sleep(300);
+		Macro::shadowlessStep();
+	}
+	delete data;
+	return 0;
+};
+
 void Client::Recv_Packet_Hook_Callback()
 {
 	// get HWND for winbaram.exe
@@ -63,7 +89,7 @@ void Client::Recv_Packet_Hook_Callback()
 	// get packets
 	ByteBuffer Packet((LPVOID)hooks->Ingoing_Packet_Pointer, hooks->Ingoing_Packet_Length);
 	std::vector<uint8_t> data = Packet.ReadBytes(0, hooks->Ingoing_Packet_Length);
-
+	std::vector<uint8_t> dataCopy = data;
 	//std::stringstream result;
 	//std::copy(data.begin(), data.end(), std::ostream_iterator<int>(result, " "));
 	//std::string test = result.str();
@@ -72,17 +98,25 @@ void Client::Recv_Packet_Hook_Callback()
 	//char nameMsg[DEFAULT_BUFLEN];
 	//int y;
 	
-	//íˆ¬ëª… ë¬´ì‹œ
-	if (data[0] == 0x1d && data[7] == 0x02 && data.size() == 25) {
-		data[7] = 0x00;
-		std::memcpy((LPVOID)hooks->Ingoing_Packet_Pointer, data.data(), data.size());
-		Macro::consoleshowtext("íˆ¬ëª… ë¬´ì‹œ ì‘ë™");
+	//Åõ¸í ¹«½Ã
+	if (data[0] == 0x08 && data[4] == 0x00 && data[5] == 0x00) {
+		pool.enqueue([]() { trans_loop(nullptr); });
 	}
+	else if (data[0] == 0x1d && data[7] == 0x02 && data.size() == 25) {
+		if (data[4] != Macro::playerId) {
+			data[7] = 0x00;
+			std::memcpy((LPVOID)hooks->Ingoing_Packet_Pointer, data.data(), data.size());
+		}
+	}
+	else if (data[0] == 0x1d && data[7] == 0x00 && data.size() == 25 && Macro::isTransparency == 1)
+		pool.enqueue(checkPacket, new std::vector<uint8_t>(dataCopy));
 
-	if (data[0] == 0x33 && data[12] == 0x02 && data.size() == 30) {
+	else if (data[0] == 0x33 && data[12] == 0x02 && data.size() == 30) {
 		data[12] = 0x00;
 		std::memcpy((LPVOID)hooks->Ingoing_Packet_Pointer, data.data(), data.size());
-		Macro::consoleshowtext("íˆ¬ëª… ë¬´ì‹œ ì‘ë™");
+	}
+	else if (data[0] == 0x5 && hooks->Ingoing_Packet_Length == 0xd || data[0] == 0x11 && hooks->Ingoing_Packet_Length == 0x7) {
+		pool.enqueue(checkPacket, new std::vector<uint8_t>(dataCopy));
 	}
 	printf("client is receiving... : \n");
 	printf("%zu: ", data.size());
@@ -95,7 +129,7 @@ void Client::Recv_Packet_Hook_Callback()
 	//	Macro::playerId = data[data.size() - 29];
 	//	printf("PlayerId :: %d\n", Macro::playerId);
 	//}
-	//// 3A 04 C0 FA C1 D6 00 00 00 B9 00 ï¿½ï¿½ï¿½ï¿½
+	//// 3A 04 C0 FA C1 D6 00 00 00 B9 00     
 	//// 3a 04 c0 fa c1 d6 00 00 00 b9 00
 	//else if (data[0] == 0x3A && data[1] == 0x04 && data[2] == 0xC0 && data[3] == 0xFA && data[4] == 0xC1 && data[9] == 0xB9) {
 	//	printf("PlayerId :: %d\n", Macro::playerId);

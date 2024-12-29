@@ -21,7 +21,7 @@ public:
 	static void transparency();
 	static void shadowlessStep();
 	static void updateSkillKey(const std::string& skillName, unsigned short& key);
-	static unsigned int threadCount;
+	static unsigned int isCtrl;
 	static unsigned short playerId;
 	static unsigned short playerX, playerY;
 	static unsigned short selectedPlayerId;
@@ -38,5 +38,6 @@ public:
 
 	static unsigned short isAttack;
 	static unsigned short isTransparency;
+
 };
 

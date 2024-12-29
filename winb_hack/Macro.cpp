@@ -32,6 +32,8 @@ unsigned short Macro::shadowlessStepKey = 0;
 unsigned short Macro::isAttack = 0;
 unsigned short Macro::isTransparency = 0;
 
+unsigned int Macro::isCtrl = 0;
+
 // INTERVAL_DATA structure for passing datas to thread
 typedef struct Data {
 	double msec;
@@ -71,17 +73,6 @@ DWORD WINAPI Macro::startAttack(LPVOID lpParam) {
 		if (isAttack == 1)
 			attack();
 		Sleep(100);
-	}
-}
-
-DWORD WINAPI Macro::startTransparency(LPVOID lpParam) {
-	while (true) {
-		if (isTransparency == 1) {
-			transparency();
-			Sleep(200);
-			shadowlessStep();
-		}
-		Sleep(300);
 	}
 }
 

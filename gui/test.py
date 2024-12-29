@@ -6,9 +6,8 @@ import time
 import tkinter as tk
 from tkinter import ttk
 import configparser
-from pynput import keyboard
 import subprocess
-import keyboard
+
 
 if getattr(sys, "frozen", False):
     program_directory = os.path.dirname(os.path.abspath(sys.executable))
@@ -175,34 +174,6 @@ def send_message_to_dll(message):
 
 is_attack_start = False
 is_transparency_start = False
-# 글로벌 핫키 처리
-def handle_attack():
-    global is_attack_start
-    if is_attack_start:
-        send_message_to_dll("stop attack")
-        is_attack_start = False
-    else:
-        send_message_to_dll("start attack")
-        is_attack_start = True
-
-
-def handle_transparency():
-    global is_transparency_start
-    if is_transparency_start:
-        send_message_to_dll("stop transparency")
-        is_transparency_start = False
-    else:
-        send_message_to_dll("start transparency")
-        is_transparency_start = True
-
-
-def start_hotkey_listener():
-    # 핫키를 등록
-    keyboard.add_hotkey('ctrl+1', handle_attack)
-    keyboard.add_hotkey('ctrl+2', handle_transparency)
-
-    # 이벤트가 발생할 때까지 대기
-    keyboard.wait()
 
 # Tkinter GUI 생성
 def main():
@@ -212,8 +183,6 @@ def main():
 
     # 소켓 서버 스레드 시작
     threading.Thread(target=start_server, daemon=True).start()
-    # 핫키 리스너 시작
-    threading.Thread(target=start_hotkey_listener, daemon=True).start()
 
     # Tkinter GUI 시작
     root = tk.Tk()
