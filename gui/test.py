@@ -23,7 +23,7 @@ REVERSE_ALPHABET_MAP = {v: k for k, v in ALPHABET_MAP.items()}  # 1=a, ..., 52=Z
 # 스킬 이름과 영어 매핑
 SKILLS = {
     "순환": "cycle",
-    "혼파술": "divorce",
+    "파혼술": "divorce",
     "금강불체": "diamond",
     "퇴마주": "exorcism"
 }
