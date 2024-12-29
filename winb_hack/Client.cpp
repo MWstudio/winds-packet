@@ -224,6 +224,9 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 			Macro::curseReceivedMe = 0;  // Set the flag to true
 		}
 	}
+	else if ((*data)[0] == 0x0A && (*data)[1] == 0x03 && dataSize == 19) {
+		Macro::diamondBody();
+	}
 
 	delete data;
 	return 0;
@@ -405,6 +408,13 @@ void Client::Recv_Packet_Hook_Callback()
 		if (data[4] == Macro::selectedPlayerId || data[4] == Macro::playerId) {
 			pool.enqueue(checkPacket, new std::vector<uint8_t>(dataCopy));
 		}
+	}
+	else if (data[0] == 0x0A && data[1] == 0x03 && hooks->Ingoing_Packet_Length == 19 && Macro::isDiamond == 1 && Macro::runDiamond == 0) {
+		pool.enqueue(checkPacket, new std::vector<uint8_t>(dataCopy));
+		Macro::runDiamond = 1;
+	}
+	else if (data[0] == 0x29 && data[5] == 0x32 && data[4] == Macro::playerId && Macro::isDiamond == 1) {
+		Macro::runDiamond = 0;
 	}
 
 	//std::stringstream result;

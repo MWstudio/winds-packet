@@ -2,15 +2,11 @@
 C:\programming\winds-packet\winb_hack\Macro.h(10,3): warning C4091: 'static ': 변수를 선언하지 않으면 'Macro::Point' 왼쪽은 무시됩니다.
 C:\programming\winds-packet\winb_hack\Client.cpp(42,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\programming\winds-packet\winb_hack\Client.cpp(77,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\programming\winds-packet\winb_hack\Client.cpp(329,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\programming\winds-packet\winb_hack\Client.cpp(419,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-  Macro.cpp
-C:\programming\winds-packet\winb_hack\Macro.h(10,3): warning C4091: 'static ': 변수를 선언하지 않으면 'Macro::Point' 왼쪽은 무시됩니다.
-C:\programming\winds-packet\winb_hack\Macro.cpp(165,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\programming\winds-packet\winb_hack\Macro.cpp(182,21): warning C4244: '=': 'unsigned short'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\programming\winds-packet\winb_hack\Client.cpp(332,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\programming\winds-packet\winb_hack\Client.cpp(429,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
   코드를 생성하고 있습니다.
-  7 of 713 functions ( 1.0%) were compiled, the rest were copied from previous compilation.
+  2 of 713 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    2 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   winb_hack.vcxproj -> C:\programming\winds-packet\Release\winb_hack.dll

@@ -1,16 +1,32 @@
+Client is sending... : 실패
+3: 0F 06 00
 client is receiving... :
-10: 1a 14 8c 76 79 01 00 14 00 00
+26: 08 38 00 00 01 32 00 00 11 d1 0e c9 bd 45 00 00 de 58 00 00 00 00 00 00 01 00
 client is receiving... :
-19: 19 00 03 01 4b 64 00 04 14 8c 76 79 01 00 02 02 00 04 00
+27: 0a 03 00 16 b8 b6 b9 fd c0 cc 20 bd c7 c6 d0 c7 cf bf b4 bd c0 b4 cf b4 d9 2e 00
+
+Client is sending... :
+3: 0F 06 00
 client is receiving... :
-16: 07 00 01 00 0e 00 04 14 8c 76 7a c0 d9 00 02 00
+26: 08 38 00 00 01 60 00 00 0f bb 0e c9 bd 45 00 00 de 58 00 00 00 00 00 00 01 00
 client is receiving... :
-8: 13 14 8c 76 3d 00 00 00
+7: 29 01 03 2b cf 32 00
+   29 01 03 2b d0 32 00
+
+15: 3a 08 c6 c4 b7 c2 b9 ab c2 fc 00 00 00 00 00
 client is receiving... :
-6: 5f 14 8c 76 3d 00
-client is receiving... :
-31: 0a 03 00 1a b0 e6 c7 e8 c4 a1 b0 a1 20 35 28 35 25 29 20 bf c3 b6 fa bd c0 b4 cf b4 d9 2e 00
-client is receiving... :
-18: 08 18 00 00 02 68 00 00 00 00 00 00 00 00 00 00 01 00
-client is receiving... :
-19: 19 00 03 01 5d 64 00 04 14 8c 76 79 01 00 02 02 00 04 00
+15: 3a 08 bd c5 b7 c9 c1 f6 c0 cd 00 00 00 00 00
+15: 3a 08 b1 dd b0 ad ba d2 c3 bc 00 00 00 00 00
+
+29: 0a 03 00 18 31 c3 ca 20 c8 c4 bf a1 20 be b5 20 bc f6 20 c0 d6 bd c0 b4 cf b4 d9 2e 00
+27: 0a 03 00 16 b8 b6 b9 fd c0 cc 20 bd c7 c6 d0 c7 cf bf b4 bd c0 b4 cf b4 d9 2e 00
+27: 0a 03 00 16 b8 b6 b9 fd c0 cc 20 bd c7 c6 d0 c7 cf bf b4 bd c0 b4 cf b4 d9 2e 00
+27: 0a 03 00 16 b8 b6 b9 fd c0 cc 20 bd c7 c6 d0 c7 cf bf b4 bd c0 b4 cf b4 d9 2e 00
+27: 0a 03 00 16 b1 dd b0 ad ba d2 c3 bc b8 a6 20 bf dc bf fc bd c0 b4 cf b4 d9 2e 00
+27: 0a 03 00 16 b1 dd b0 ad ba d2 c3 bc b8 a6 20 bf dc bf fc bd c0 b4 cf b4 d9 2e 00
+
+
+
+19: 0a 03 00 0e b1 dd b0 ad ba d2 c3 bc 20 c7 d8 c1 a6 2e 00
+19 :0a 03 00 0e b1 dd b0 ad ba d2 c3 bc 20 c7 d8 c1 a6 2e 00
+19 :0a 03 00 0e b1 dd b0 ad ba d2 c3 bc 20 c7 d8 c1 a6 2e 00

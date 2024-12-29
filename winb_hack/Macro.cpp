@@ -26,7 +26,7 @@ unsigned short Macro::necromancyReceivedSelected = 0;
 
 unsigned short Macro::curseReceivedMe = 0;
 unsigned short Macro::curseReceivedSelected = 0;
-
+unsigned short Macro::runDiamond = 0;
 unsigned short Macro::cycleKey = 0;
 unsigned short Macro::divorceKey = 0;
 unsigned short Macro::diamondKey = 0;
@@ -78,12 +78,15 @@ void Macro::updateSkillKey(const std::string& skillName, unsigned short& key) {
 }
 unsigned char* korStrToHex(const char* korStr) {
 	size_t charCount = strlen(korStr);
-	static unsigned char buffer[BUFSIZ] = { 0, };
+	unsigned char* buffer = (unsigned char*)malloc(charCount + 1); // 동적 메모리 할당
+
+	if (!buffer) return nullptr; // 메모리 할당 실패 시 처리
 
 	for (size_t i = 0; i < charCount; i++) {
-		unsigned char cc = *((unsigned char*)korStr + i);
-		buffer[i] = cc;
+		buffer[i] = (unsigned char)korStr[i];
 	}
+	buffer[charCount] = '\0'; // 문자열 종료
+
 	return buffer;
 }
 void say() {
@@ -126,10 +129,13 @@ void Macro::test() {
 
 
 void Macro::consoleshowtext(const char* korStr) {
-	static unsigned char text[BUFSIZ] = { 0, };
+	// 정적 배열 대신 새로운 배열을 사용하여 매 호출마다 초기화
+	unsigned char text[BUFSIZ] = { 0, };
 	unsigned char* hex = korStrToHex(korStr);
 	int length = strlen(korStr);
 	int i;
+
+	// 정적 배열을 매 호출 시 초기화
 	text[0] = 0x0A;
 	text[1] = 0x00;
 	text[2] = 0x00;
@@ -139,6 +145,10 @@ void Macro::consoleshowtext(const char* korStr) {
 		text[i] = hex[i - 4];
 	text[i] = 0x00;
 
+	// 메모리 해제
+	free(hex);
+
+	// 메시지 전송
 	PostMessage(Macro::macroHWND, WM_USER + 3, (WPARAM)text, length + 6);
 }
 
@@ -152,11 +162,8 @@ DWORD WINAPI Macro::startCycle(LPVOID lpParam) {
 }
 
 DWORD WINAPI Macro::startDiamond(LPVOID lpParam) {
-	while (true) {
-		if (isDiamond == 1)
-			diamondBody();
-		Sleep(500);
-	}
+	diamondBody();
+	ExitThread(0);
 }
 
 void Macro::cycle() { //순환 0F 0A 00
@@ -176,20 +183,31 @@ void Macro::cycle() { //순환 0F 0A 00
 
 }
 
+int isRunningDiamond = 0;
 void Macro::diamondBody() { //금강불체 0F 06 00 
-	int size = 3;
-	char packet[3] = { 0x0F, 0x06, 0x00 };
-	packet[1] = Macro::diamondKey;
-	unsigned char sendpacket[100] = { "0", };
-	Hooks::LoadEncrypt(packet, size, Hooks::encrypted);
-	sendpacket[0] = 0xAA;
-	sendpacket[1] = 0x00;
-	sendpacket[2] = size + 0x1;
-	for (int i = 3; i < size + 4; i++)
-		sendpacket[i] = Hooks::encrypted[i - 3];
+	if (isRunningDiamond == 1)
+		return;
+
+	isRunningDiamond = 1;
+	while (true) {
+		if (runDiamond == 0 || isDiamond == 0)
+			break;
+		int size = 3;
+		char packet[3] = { 0x0F, 0x06, 0x00 };
+		packet[1] = Macro::diamondKey;
+		unsigned char sendpacket[100] = { "0", };
+		Hooks::LoadEncrypt(packet, size, Hooks::encrypted);
+		sendpacket[0] = 0xAA;
+		sendpacket[1] = 0x00;
+		sendpacket[2] = size + 0x1;
+		for (int i = 3; i < size + 4; i++)
+			sendpacket[i] = Hooks::encrypted[i - 3];
 
 
-	send(Hooks::Con_Packet_Socket, (const char*)sendpacket, size + 4, 0);
+		send(Hooks::Con_Packet_Socket, (const char*)sendpacket, size + 4, 0);
+		Sleep(200);
+	}
+	isRunningDiamond = 0;
 }
 
 

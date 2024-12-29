@@ -33,6 +33,7 @@ public:
 	static unsigned short necromancyReceivedSelected;
 	static unsigned short curseReceivedMe;
 	static unsigned short curseReceivedSelected;
+	static unsigned short runDiamond;
 
 	static unsigned short cycleKey;
 	static unsigned short divorceKey;
