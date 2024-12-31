@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Github\winds-packet\Release\winb_hack.dll</FullPath>
+      <FullPath>C:\programming\winds-packet\Release\winb_hack.dll</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

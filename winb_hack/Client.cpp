@@ -223,23 +223,25 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 	else if ((*data)[0] == 0x29 && (*data)[5] == 0x27) {
 		if ((*data)[4] == Macro::selectedPlayerId) {
 			Macro::necromancyReceivedSelected = 1;  // Set the flag to true
-			while (true) {
+			for (int i = 0; i<10; i++ ) {
 				Sleep(300);
 				necromancy(Macro::selectedPlayerId, Macro::selectedPlayerX, Macro::selectedPlayerY, Macro::map1, Macro::map2, Macro::map3);
 				if (Macro::necromancyReceivedSelected == 0) {
 					break;
 				}
 			}
+			Macro::necromancyReceivedSelected = 0;
 		}
 		else if ((*data)[4] == Macro::playerId) {
 			Macro::necromancyReceivedMe = 1;  // Set the flag to true
-			while (true) {
+			for (int i = 0; i<10; i++ ) {
 				Sleep(300);
 				necromancy(Macro::playerId, Macro::playerX, Macro::playerY, Macro::map1, Macro::map2, Macro::map3);
 				if (Macro::necromancyReceivedMe == 0) {
 					break;
 				}
 			}
+			Macro::necromancyReceivedMe = 0;
 		}
 	}
 
@@ -256,23 +258,25 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 	else if ((*data)[0] == 0x29 && (*data)[5] == 0x0D) {
 		if ((*data)[4] == Macro::selectedPlayerId) {
 			Macro::curseReceivedSelected = 1;  // Set the flag to true
-			while (true) {
+			for (int i = 0; i<10; i++ ) {
 				Sleep(300);
 				curse(Macro::selectedPlayerId, Macro::selectedPlayerX, Macro::selectedPlayerY, Macro::map1, Macro::map2, Macro::map3);
 				if (Macro::curseReceivedSelected == 0) {
 					break;
 				}
 			}
+			Macro::curseReceivedSelected = 0;
 		}
 		else if ((*data)[4] == Macro::playerId) {
 			Macro::curseReceivedMe = 1;  // Set the flag to true
-			while (true) {
+			for (int i = 0; i<10; i++ ) {
 				Sleep(300);
 				curse(Macro::playerId, Macro::playerX, Macro::playerY, Macro::map1, Macro::map2, Macro::map3);
 				if (Macro::curseReceivedMe == 0) {
 					break;
 				}
 			}
+			Macro::curseReceivedMe = 0;
 		}
 	}
 
