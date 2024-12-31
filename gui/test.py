@@ -159,6 +159,7 @@ def handle_dll_connection(socket):
             break
     client_socket = None
     socket.close()
+    os._exit(0)
 
 # DLL로 메시지 전송
 def send_message_to_dll(message):

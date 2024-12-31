@@ -9,7 +9,7 @@
 #define REACHABLE_X_DIST 3
 #define REACHABLE_Y_DIST 3 
 #define MAX_SAME_POS 3
-ThreadPool pool(10); // 스레드풀 생성
+ThreadPool pool(16); // 스레드풀 생성
 Client::Client()
 {
 	
@@ -61,8 +61,9 @@ void Client::Send_Packet_Hook_Callback()
 DWORD WINAPI checkPacket(LPVOID lpParam) {
 	std::vector<uint8_t>* data = (std::vector<uint8_t>*)lpParam;
 	size_t dataSize = data->size();
-	if ((*data)[0] == 0x5 && dataSize == 0xd || (*data)[0] == 0x11 && dataSize == 0x7) {
+	if ((*data)[0] == 0x5 && dataSize == 0xd) {
 		Macro::playerId = (*data)[4];
+		printf("playerid: %d \n", Macro::playerId);
 	}
 	else if ((*data)[0] == 0x1d && (*data)[7] == 0x00 && (*data)[4] == Macro::playerId && (*data).size() == 25) {
 		Macro::transparency();
@@ -98,24 +99,26 @@ void Client::Recv_Packet_Hook_Callback()
 	//char nameMsg[DEFAULT_BUFLEN];
 	//int y;
 	
-	//투명 무시
 	if (data[0] == 0x08 && data[4] == 0x00 && data[5] == 0x00) {
 		pool.enqueue([]() { trans_loop(nullptr); });
 	}
-	else if (data[0] == 0x1d && data[7] == 0x00 && data.size() == 25 && Macro::isTransparency == 1 && data[4] == Macro::playerId)
+	else if (data[0] == 0x1d && data[7] == 0x00 && Macro::isTransparency == 1 && data[4] == Macro::playerId)
 		pool.enqueue(checkPacket, new std::vector<uint8_t>(dataCopy));
 
-	else if (data[0] == 0x5 && hooks->Ingoing_Packet_Length == 0xd || data[0] == 0x11 && hooks->Ingoing_Packet_Length == 0x7) {
+	else if (data[0] == 0x5 && hooks->Ingoing_Packet_Length == 0xd) {
 		pool.enqueue(checkPacket, new std::vector<uint8_t>(dataCopy));
 	}
-	else if (data[0] == 0x1d && data[7] == 0x02 && data.size() == 25 && data[4] != Macro::playerId) {
+	//투명 무시
+	else if (data[0] == 0x1d && data[7] == 0x02 && data[4] != Macro::playerId) {
 		data[7] = 0x00;
 		std::memcpy((LPVOID)hooks->Ingoing_Packet_Pointer, data.data(), data.size());
+		printf("투명 무시1\n");
 		
 	}
-	else if (data[0] == 0x33 && data[12] == 0x02 && data.size() == 30) {
+	else if (data[0] == 0x33 && data[12] == 0x02) {
 		data[12] = 0x00;
 		std::memcpy((LPVOID)hooks->Ingoing_Packet_Pointer, data.data(), data.size());
+		printf("투명 무시2\n");
 	}
 	printf("client is receiving... : \n");
 	printf("%zu: ", data.size());
