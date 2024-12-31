@@ -64,7 +64,7 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 	if ((*data)[0] == 0x5 && dataSize == 0xd || (*data)[0] == 0x11 && dataSize == 0x7) {
 		Macro::playerId = (*data)[4];
 	}
-	else if ((*data)[0] == 0x1d && (*data)[7] == 0x00 && (*data).size() == 25) {
+	else if ((*data)[0] == 0x1d && (*data)[7] == 0x00 && (*data)[4] == Macro::playerId && (*data).size() == 25) {
 		Macro::transparency();
 		Sleep(300);
 		Macro::shadowlessStep();
@@ -102,13 +102,12 @@ void Client::Recv_Packet_Hook_Callback()
 	if (data[0] == 0x08 && data[4] == 0x00 && data[5] == 0x00) {
 		pool.enqueue([]() { trans_loop(nullptr); });
 	}
-	else if (data[0] == 0x1d && data[7] == 0x02 && data.size() == 25) {
-		if (data[4] != Macro::playerId) {
-			data[7] = 0x00;
-			std::memcpy((LPVOID)hooks->Ingoing_Packet_Pointer, data.data(), data.size());
-		}
+	else if (data[0] == 0x1d && data[7] == 0x02 && data.size() == 25 && data[4] != Macro::playerId) {
+		data[7] = 0x00;
+		std::memcpy((LPVOID)hooks->Ingoing_Packet_Pointer, data.data(), data.size());
+		
 	}
-	else if (data[0] == 0x1d && data[7] == 0x00 && data.size() == 25 && Macro::isTransparency == 1)
+	else if (data[0] == 0x1d && data[7] == 0x00 && data.size() == 25 && Macro::isTransparency == 1 && data[4] == Macro::playerId)
 		pool.enqueue(checkPacket, new std::vector<uint8_t>(dataCopy));
 
 	else if (data[0] == 0x33 && data[12] == 0x02 && data.size() == 30) {
