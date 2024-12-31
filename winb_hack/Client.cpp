@@ -9,7 +9,7 @@
 #define REACHABLE_X_DIST 3
 #define REACHABLE_Y_DIST 3 
 #define MAX_SAME_POS 3
-ThreadPool pool(10); // 스레드풀 생성
+ThreadPool pool(16); // 스레드풀 생성
 
 Client::Client()
 {
@@ -58,7 +58,6 @@ void curse(int playerId, int x, int y, int map1, int map2, int map3) {
 		printf("Send failed with error: %d\n", WSAGetLastError());
 		return;
 	}
-	printf("curse : x,y,id: %d, %d %d\n", Macro::playerX, Macro::playerY, Macro::playerId);
 	return;
 }
 
@@ -94,7 +93,6 @@ void necromancy(int playerId, int x, int y, int map1, int map2, int map3) {
 		printf("Send failed with error: %d\n", WSAGetLastError());
 		return;
 	}
-	printf("necromancy : x, y, id, map1, map2, map3: %d,%d %d %d %d %d\n", x, y, playerId, map1, map2, map3);
 	return;
 }
 
@@ -127,7 +125,6 @@ void armed(int playerId, int x, int y, int map1, int map2, int map3) {
 		printf("Send failed with error: %d\n", WSAGetLastError());
 		return;
 	}
-	printf("armed");
 	return;
 }
 
@@ -160,7 +157,6 @@ void protect(int playerId, int x, int y, int map1, int map2, int map3) {
 		printf("Send failed with error: %d\n", WSAGetLastError());
 		return;
 	}
-	printf("protect");
 	return;
 }
 DWORD WINAPI checkPacket(LPVOID lpParam) {
@@ -171,26 +167,26 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 		if ((*data)[9] == 0x00) {
 			Macro::selectedPlayerX = (*data)[6];
 			Macro::selectedPlayerY = (*data)[8] - 1;
-			printf("%s %d\n", "playerX:", Macro::selectedPlayerX);
-			printf("%s %d\n", "playerY:", Macro::selectedPlayerY);
+			//printf("%s %d\n", "playerX:", Macro::selectedPlayerX);
+			//printf("%s %d\n", "playerY:", Macro::selectedPlayerY);
 		}
 		if ((*data)[9] == 0x01) {
 			Macro::selectedPlayerX = (*data)[6] + 1;
 			Macro::selectedPlayerY = (*data)[8];
-			printf("%s %d\n", "playerX:", Macro::selectedPlayerX);
-			printf("%s %d\n", "playerY:", Macro::selectedPlayerY);
+			//printf("%s %d\n", "playerX:", Macro::selectedPlayerX);
+			//printf("%s %d\n", "playerY:", Macro::selectedPlayerY);
 		}
 		if ((*data)[9] == 0x02) {
 			Macro::selectedPlayerX = (*data)[6];
 			Macro::selectedPlayerY = (*data)[8] + 1;
-			printf("%s %d\n", "playerX:", Macro::selectedPlayerX);
-			printf("%s %d\n", "playerY:", Macro::selectedPlayerY);
+			//printf("%s %d\n", "playerX:", Macro::selectedPlayerX);
+			//printf("%s %d\n", "playerY:", Macro::selectedPlayerY);
 		}
 		if ((*data)[9] == 0x03) {
 			Macro::selectedPlayerX = (*data)[6] - 1;
 			Macro::selectedPlayerY = (*data)[8];
-			printf("%s %d\n", "playerX:", Macro::selectedPlayerX);
-			printf("%s %d\n", "playerY:", Macro::selectedPlayerY);
+			//printf("%s %d\n", "playerX:", Macro::selectedPlayerX);
+			//printf("%s %d\n", "playerY:", Macro::selectedPlayerY);
 		}
 	}
 	else if ((*data)[0] == 0x11 && dataSize == 0x7) {
@@ -216,7 +212,7 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 		
 		if (Macro::playerId != id && id != 0) {
 			Macro::selectedPlayerId = id;
-			printf("selectedPlayerId :: %d\n", Macro::selectedPlayerId);
+			printf("selectedPlayerId : %d\n", Macro::selectedPlayerId);
 		}
 	}
 	// 29 3a 75 a3 78 0d 00
@@ -406,12 +402,12 @@ void Client::Send_Packet_Hook_Callback()
 	/*std::stringstream result;
 	std::copy(data.begin(), data.end(), std::ostream_iterator<int>(result, " "));
 	std::string test = result.str();*/
-	printf("Client is sending... : \n");
-	printf("%zu: ", data.size()); // data.size()    
-	for (int i = 0; i < data.size(); i++) {
-		printf("%02X ", data[i]);
-	}
-	printf("\n");
+	//printf("Client is sending... : \n");
+	//printf("%zu: ", data.size()); // data.size()    
+	//for (int i = 0; i < data.size(); i++) {
+	//	printf("%02X ", data[i]);
+	//}
+	//printf("\n");
 	std::vector<uint8_t> dataCopy = data;
 	if (data[0] == 0x32 && hooks->Outgoing_Packet_Length == 8) 
 		pool.enqueue(checkSendPacket, new std::vector<uint8_t>(dataCopy));
@@ -508,10 +504,10 @@ void Client::Recv_Packet_Hook_Callback()
 	//int strLen = 0;
 	//char nameMsg[DEFAULT_BUFLEN];
 	//int y;
-	printf("client is receiving... : \n");
-	printf("%zu: ", data.size()); // data.size()
-	for (int i = 0; i < data.size(); i++) {
-		printf("%02x ", data[i]);
-	}
-	printf("\n");
+	//printf("client is receiving... : \n");
+	//printf("%zu: ", data.size()); // data.size()
+	//for (int i = 0; i < data.size(); i++) {
+	//	printf("%02x ", data[i]);
+	//}
+	//printf("\n");
 }

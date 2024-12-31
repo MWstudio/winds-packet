@@ -28,10 +28,11 @@ public:
                         task = std::move(tasks.front());
                         tasks.pop();
                     }
-
-                    printf("Worker thread %s is processing a task.\n", getThreadId().c_str());
+                    ++threadNowCount;
+                    printf("now thread: %d\n", threadNowCount);
                     task();
-                    printf("Worker thread %s finished processing a task.\n", getThreadId().c_str());
+                    --threadNowCount;
+                    printf("now thread: %d\n", threadNowCount);
                 }
                 });
         }
@@ -49,7 +50,6 @@ public:
 
     template<class F, class... Args>
     auto enqueue(F&& f, Args&&... args) -> std::future<typename std::result_of<F(Args...)>::type> {
-        printf("enqueue");
         using returnType = typename std::result_of<F(Args...)>::type;
 
         auto task = std::make_shared<std::packaged_task<returnType()>>(
@@ -76,7 +76,7 @@ private:
     std::mutex queueMutex;
     std::condition_variable condition;
     bool stop = false;
-
+    int threadNowCount = 0;
     static std::string getThreadId() {
         std::ostringstream oss;
         oss << std::this_thread::get_id();
