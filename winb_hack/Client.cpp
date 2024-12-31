@@ -98,6 +98,71 @@ void necromancy(int playerId, int x, int y, int map1, int map2, int map3) {
 	return;
 }
 
+void armed(int playerId, int x, int y, int map1, int map2, int map3) {
+	if (x == 0 && y == 0) {
+		return;
+	}
+	if (playerId == 0) {
+		return;
+	}
+	int size = 11;
+	char packet[11] = { 0x0F, 0x08, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+	packet[1] = Macro::armedKey;
+	packet[2] = map1;
+	packet[3] = map2;
+	packet[4] = map3;
+	packet[5] = playerId;
+	packet[7] = x;
+	packet[9] = y;
+
+	unsigned char sendpacket[100] = { "0", };
+	Hooks::LoadEncrypt(packet, size, Hooks::encrypted);
+	sendpacket[0] = 0xAA;
+	sendpacket[1] = 0x00;
+	sendpacket[2] = size + 0x1;
+	for (int i = 3; i < size + 4; i++)
+		sendpacket[i] = Hooks::encrypted[i - 3];
+	int result = send(Hooks::Con_Packet_Socket, (const char*)sendpacket, size + 4, 0);
+	if (result == SOCKET_ERROR) {
+		printf("Send failed with error: %d\n", WSAGetLastError());
+		return;
+	}
+	printf("armed");
+	return;
+}
+
+void protect(int playerId, int x, int y, int map1, int map2, int map3) {
+	if (x == 0 && y == 0) {
+		return;
+	}
+	if (playerId == 0) {
+		return;
+	}
+	int size = 11;
+	char packet[11] = { 0x0F, 0x08, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+	packet[1] = Macro::protectKey;
+	packet[2] = map1;
+	packet[3] = map2;
+	packet[4] = map3;
+	packet[5] = playerId;
+	packet[7] = x;
+	packet[9] = y;
+
+	unsigned char sendpacket[100] = { "0", };
+	Hooks::LoadEncrypt(packet, size, Hooks::encrypted);
+	sendpacket[0] = 0xAA;
+	sendpacket[1] = 0x00;
+	sendpacket[2] = size + 0x1;
+	for (int i = 3; i < size + 4; i++)
+		sendpacket[i] = Hooks::encrypted[i - 3];
+	int result = send(Hooks::Con_Packet_Socket, (const char*)sendpacket, size + 4, 0);
+	if (result == SOCKET_ERROR) {
+		printf("Send failed with error: %d\n", WSAGetLastError());
+		return;
+	}
+	printf("protect");
+	return;
+}
 DWORD WINAPI checkPacket(LPVOID lpParam) {
 	std::vector<uint8_t>* data = (std::vector<uint8_t>*)lpParam;
 	size_t dataSize = data->size();
@@ -152,7 +217,6 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 		if (Macro::playerId != id && id != 0) {
 			Macro::selectedPlayerId = id;
 			printf("selectedPlayerId :: %d\n", Macro::selectedPlayerId);
-			Macro::consoleshowtext("플레이어 지정 완료");
 		}
 	}
 	// 29 3a 75 a3 78 0d 00
@@ -222,6 +286,21 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 		}
 		else if ((*data)[4] == Macro::playerId) {
 			Macro::curseReceivedMe = 0;  // Set the flag to true
+		}
+	}
+
+	else if ((*data)[0] == 0x29 && (*data)[5] == 0x0A) {
+		if ((*data)[4] == Macro::selectedPlayerId) {
+			Sleep(100);
+			protect(Macro::selectedPlayerId, Macro::playerX, Macro::playerY, Macro::map1, Macro::map2, Macro::map3);
+			Sleep(400);
+			armed(Macro::selectedPlayerId, Macro::playerX, Macro::playerY, Macro::map1, Macro::map2, Macro::map3);
+		}
+		else if ((*data)[4] == Macro::playerId) {
+			Sleep(100);
+			protect(Macro::playerId, Macro::playerX, Macro::playerY, Macro::map1, Macro::map2, Macro::map3);
+			Sleep(400);
+			armed(Macro::playerId, Macro::playerX, Macro::playerY, Macro::map1, Macro::map2, Macro::map3);
 		}
 	}
 	else if ((*data)[0] == 0x0A && (*data)[1] == 0x03 && dataSize == 19) {
@@ -360,9 +439,9 @@ void Client::Recv_Packet_Hook_Callback()
 	ByteBuffer Packet((LPVOID)hooks->Ingoing_Packet_Pointer, hooks->Ingoing_Packet_Length);
 	std::vector<uint8_t> data = Packet.ReadBytes(0, hooks->Ingoing_Packet_Length);
 	std::vector<uint8_t> dataCopy = data;
-	
+
 	/*if (data[0] == 0x08 && hooks->Ingoing_Packet_Length == 49) {
-		data[8] = 90;	
+		data[8] = 90;
 		std::memcpy((LPVOID)hooks->Ingoing_Packet_Pointer, data.data(), data.size());
 	}*/
 
@@ -405,6 +484,11 @@ void Client::Recv_Packet_Hook_Callback()
 		}
 	}
 	else if (data[0] == 0x29 && data[5] == 0x16) {
+		if (data[4] == Macro::selectedPlayerId || data[4] == Macro::playerId) {
+			pool.enqueue(checkPacket, new std::vector<uint8_t>(dataCopy));
+		}
+	}
+	else if (data[0] == 0x29 && data[5] == 0x0A) {
 		if (data[4] == Macro::selectedPlayerId || data[4] == Macro::playerId) {
 			pool.enqueue(checkPacket, new std::vector<uint8_t>(dataCopy));
 		}

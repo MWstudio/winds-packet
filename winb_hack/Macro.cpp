@@ -31,6 +31,8 @@ unsigned short Macro::cycleKey = 0;
 unsigned short Macro::divorceKey = 0;
 unsigned short Macro::diamondKey = 0;
 unsigned short Macro::exorcismKey = 0;
+unsigned short Macro::protectKey = 0;
+unsigned short Macro::armedKey = 0;
 
 unsigned short Macro::isCycle = 0;
 unsigned short Macro::isDiamond = 0;
@@ -71,6 +73,14 @@ void Macro::updateSkillKey(const std::string& skillName, unsigned short& key) {
 	else if (skillName == "exorcism") {
 		Macro::exorcismKey = key;
 		printf("%d Update exorcism\n", Macro::exorcismKey);
+	}
+	else if (skillName == "protect") {
+		Macro::protectKey = key;
+		printf("%d Update protect\n", Macro::protectKey);
+	}
+	else if (skillName == "armed") {
+		Macro::armedKey = key;
+		printf("%d Update armed\n", Macro::armedKey);
 	}
 	else {
 		printf("Unknown skill name: %s\n", skillName.c_str());

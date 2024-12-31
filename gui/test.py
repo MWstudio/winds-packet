@@ -25,7 +25,9 @@ SKILLS = {
     "순환": "cycle",
     "파혼술": "divorce",
     "금강불체": "diamond",
-    "퇴마주": "exorcism"
+    "퇴마주": "exorcism",
+    "보호" : "protect",
+    "무장" : "armed"
 }
 
 # 이미 선택된 알파벳 추적
@@ -121,6 +123,7 @@ def start_server():
             send_initial_settings()  # 연결되었을 때 설정 값 전송
             handle_dll_connection(client_socket)
         except Exception as e:
+            sys.exit()  # 프로그램 종료
             update_connect_status("대기중")
             print(f"Error while accepting connection: {e}")
 
@@ -142,8 +145,6 @@ def send_initial_settings():
             except Exception as e:
                 print(f"Error while sending initial settings for {skill_key}: {e}")
 
-        
-
 # DLL 메시지 처리
 def handle_dll_connection(socket):
     global client_socket
@@ -153,6 +154,7 @@ def handle_dll_connection(socket):
             if not data:
                 print("DLL disconnected.")
                 update_connect_status("대기중")
+                sys.exit()  # 프로그램 종료
                 break
             print(f"Received from DLL: {data.decode()}")
         except Exception as e:
@@ -161,7 +163,7 @@ def handle_dll_connection(socket):
     client_socket = None
     socket.close()
     print("Socket connection closed. Exiting program.")
-    sys.exit()  # 프로그램 종료
+    os._exit(0)
 
 # DLL로 메시지 전송
 def send_message_to_dll(message):
@@ -187,7 +189,7 @@ def main():
     # Tkinter GUI 시작
     root = tk.Tk()
     root.title("Skill Configuration")
-    root.geometry("300x250")
+    root.geometry("300x350")
 
     global dropdowns
     dropdowns = {}

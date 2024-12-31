@@ -39,6 +39,8 @@ public:
 	static unsigned short divorceKey;
 	static unsigned short diamondKey;
 	static unsigned short exorcismKey;
+	static unsigned short protectKey;
+	static unsigned short armedKey;
 
 	static unsigned short isCycle;
 	static unsigned short isDiamond;
