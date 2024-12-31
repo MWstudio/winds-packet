@@ -195,7 +195,7 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 		Macro::map3 = (*data)[3];
 	}
 	//it's me
-	else if ((*data)[0] == 0x5 && dataSize == 0xd || (*data)[0] == 0x11 && dataSize == 0x7) {
+	else if ((*data)[0] == 0x5 && dataSize == 0xd) {
 		Macro::playerId = (*data)[4];
 	}
 
@@ -213,13 +213,15 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 		if (Macro::playerId != id && id != 0) {
 			Macro::selectedPlayerId = id;
 			printf("selectedPlayerId : %d\n", Macro::selectedPlayerId);
+			for (int i = 0; i < 2; i++) {
+				Sleep(1000);
+				necromancy(Macro::selectedPlayerId, Macro::selectedPlayerX, Macro::selectedPlayerY, Macro::map1, Macro::map2, Macro::map3);
+				Sleep(300);
+				curse(Macro::selectedPlayerId, Macro::selectedPlayerX, Macro::selectedPlayerY, Macro::map1, Macro::map2, Macro::map3);
+			}
 		}
 	}
-	// 29 3a 75 a3 78 0d 00
-	// 29 3a 75 a3 78 31 00
-	// 29 01 03 2b 49 31 00
-	// 
-	// ?   29 ?? ?? ?? unidque_id 27 00
+
 	else if ((*data)[0] == 0x29 && (*data)[5] == 0x27) {
 		if ((*data)[4] == Macro::selectedPlayerId) {
 			Macro::necromancyReceivedSelected = 1;  // Set the flag to true
@@ -254,7 +256,6 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 		}
 	}
 
-	// 29 01 03 ?? unidque_id 0d 00
 	else if ((*data)[0] == 0x29 && (*data)[5] == 0x0D) {
 		if ((*data)[4] == Macro::selectedPlayerId) {
 			Macro::curseReceivedSelected = 1;  // Set the flag to true
@@ -462,7 +463,7 @@ void Client::Recv_Packet_Hook_Callback()
 	else if (data[0] == 0x11 && hooks->Ingoing_Packet_Length == 0x7) {
 		pool.enqueue(checkPacket, new std::vector<uint8_t>(dataCopy));
 	}
-	else if (data[0] == 0x5 && hooks->Ingoing_Packet_Length == 0xd || data[0] == 0x11 && hooks->Ingoing_Packet_Length == 0x7) {
+	else if (data[0] == 0x5 && hooks->Ingoing_Packet_Length == 0xd) {
 		pool.enqueue(checkPacket, new std::vector<uint8_t>(dataCopy));
 	}
 	else if (Macro::isCtrl == 1 && data[0] == 0x34 && data[hooks->Ingoing_Packet_Length - 2] == 0x2e && data[hooks->Ingoing_Packet_Length - 3] == 0xdb && data[hooks->Ingoing_Packet_Length - 4] == 0xc0) {
