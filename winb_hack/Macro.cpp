@@ -132,7 +132,7 @@ void Macro::attack() {
 
 }
 
-void Macro::transparency() { //����
+void Macro::transparency() {
 	int size = 3;
 	char packet[3] = { 0x0F, 0x00, 0x00 };
 	packet[1] = Macro::transparencyKey;

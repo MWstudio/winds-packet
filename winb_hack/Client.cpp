@@ -27,12 +27,27 @@ void Client::Con_Packet_Hook_Callback()
 	printf("----Socket: %x\n", hooks->Con_Packet_Socket);
 }
 
+void nuri() {
+	int size = 3;
+	char packet[3] = { 0x0F, 0x0A, 0x00 };
+	unsigned char sendpacket[100] = { "0", };
+	Hooks::LoadEncrypt(packet, size, Hooks::encrypted);
+	sendpacket[0] = 0xAA;
+	sendpacket[1] = 0x00;
+	sendpacket[2] = size + 0x1;
+	for (int i = 3; i < size + 4; i++)
+		sendpacket[i] = Hooks::encrypted[i - 3];
+
+	send(Hooks::Con_Packet_Socket, (const char*)sendpacket, size + 4, 0);
+}
+
+
 int j = 0;
-DWORD WINAPI trans_loop(LPVOID lpParam) {
+DWORD WINAPI nuri_loop(LPVOID lpParam) {
 	if (j == 1) return 0;
 	for (int i = 0; i < 5; i++) {
 		j = 1;
-		Macro::transparency();
+		nuri();
 		Sleep(200);
 	}
 	j = 0;
@@ -100,7 +115,7 @@ void Client::Recv_Packet_Hook_Callback()
 	//int y;
 	
 	if (data[0] == 0x08 && data[4] == 0x00 && data[5] == 0x00) {
-		pool.enqueue([]() { trans_loop(nullptr); });
+		pool.enqueue([]() { nuri_loop(nullptr); });
 	}
 	else if (data[0] == 0x1d && data[7] == 0x00 && Macro::isTransparency == 1 && data[4] == Macro::playerId)
 		pool.enqueue(checkPacket, new std::vector<uint8_t>(dataCopy));
