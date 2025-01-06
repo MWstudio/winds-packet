@@ -45,5 +45,6 @@ public:
 	static unsigned short isCycle;
 	static unsigned short isDiamond;
 	static unsigned int isCtrl;
+	static unsigned int cert;
 };
 

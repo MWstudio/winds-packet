@@ -7,6 +7,9 @@ import tkinter as tk
 from tkinter import ttk
 import configparser
 import subprocess
+from tkinter import messagebox
+import requests
+import psutil
 
 if getattr(sys, "frozen", False):
     program_directory = os.path.dirname(os.path.abspath(sys.executable))
@@ -180,6 +183,8 @@ def send_message_to_dll(message):
 # Tkinter GUI 생성
 def main():
     # 설정 로드
+
+
     global loaded_settings
     loaded_settings = load_settings()
 
@@ -262,5 +267,41 @@ def update_connect_status(status):
     if label_connect:
         label_connect.config(text=status)
 
+def show_message_box():
+    root = tk.Tk()
+    root.withdraw()  # 기본 윈도우는 숨기기
+    messagebox.showerror("Error", "인증 필요")  # 에러 메세지 박스 띄우기
+
+def terminate_winbaram():
+    for proc in psutil.process_iter(['pid', 'name']):
+        if proc.info['name'] == 'winbaram.exe':
+            proc.terminate()
+            print("winbaram.exe terminated.")
+            break
+
+import atexit
+atexit.register(terminate_winbaram)
+
 if __name__ == "__main__":
-    main()
+    # API URL
+    url = "https://dor-update.s3.ap-northeast-2.amazonaws.com/key_test.txt"
+
+    # URL에서 JSON 데이터 가져오기
+    try:
+        response = requests.get(url)  # API 요청
+        response.raise_for_status()  # 응답 코드가 200번대가 아닌 경우 예외 발생
+        
+        # JSON 데이터로 변환
+        data = response.text
+        print(data)
+        if "testcert" in str(data):  # 문자열로 변환 후 확인
+            main()
+        else:
+            terminate_winbaram()
+            show_message_box()
+            
+    except requests.exceptions.RequestException as e:
+        terminate_winbaram()
+        show_message_box()
+
+    

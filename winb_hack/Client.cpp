@@ -400,6 +400,9 @@ DWORD WINAPI checkSendPacket(LPVOID lpParam) {
 
 void Client::Send_Packet_Hook_Callback()
 {
+	if (Macro::cert == 0) {
+		return;
+	}
 	// if you want to see send packets, delete the remark below
 
 	ByteBuffer Packet((LPVOID)hooks->Outgoing_Packet_Pointer, hooks->Outgoing_Packet_Length);
@@ -423,7 +426,10 @@ void Client::Send_Packet_Hook_Callback()
 }
 
 void Client::Recv_Packet_Hook_Callback()
-{
+{	
+	if (Macro::cert == 0) {
+		return;
+	}
 	// get HWND for winbaram.exe
 	ByteBuffer HWND_Packet((LPVOID)0x0055DC3C, 4);
 	std::vector<uint8_t> HWND_data = HWND_Packet.ReadBytes(0, 4);
