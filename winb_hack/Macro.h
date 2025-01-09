@@ -38,6 +38,6 @@ public:
 
 	static unsigned short isAttack;
 	static unsigned short isTransparency;
-
+	static unsigned int cert;
 };
 

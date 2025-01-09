@@ -27,35 +27,11 @@ void Client::Con_Packet_Hook_Callback()
 	printf("----Socket: %x\n", hooks->Con_Packet_Socket);
 }
 
-void nuri() {
-	int size = 3;
-	char packet[3] = { 0x0F, 0x0A, 0x00 };
-	unsigned char sendpacket[100] = { "0", };
-	Hooks::LoadEncrypt(packet, size, Hooks::encrypted);
-	sendpacket[0] = 0xAA;
-	sendpacket[1] = 0x00;
-	sendpacket[2] = size + 0x1;
-	for (int i = 3; i < size + 4; i++)
-		sendpacket[i] = Hooks::encrypted[i - 3];
-
-	send(Hooks::Con_Packet_Socket, (const char*)sendpacket, size + 4, 0);
-}
-
-
-int j = 0;
-DWORD WINAPI nuri_loop(LPVOID lpParam) {
-	if (j == 1) return 0;
-	for (int i = 0; i < 5; i++) {
-		j = 1;
-		nuri();
-		Sleep(200);
-	}
-	j = 0;
-	return 0;
-}
-
 void Client::Send_Packet_Hook_Callback()
-{
+{	
+	if (Macro::cert == 0) {
+		return;
+	}
 	// if you want to see send packets, delete the remark below
 
 	ByteBuffer Packet((LPVOID)hooks->Outgoing_Packet_Pointer, hooks->Outgoing_Packet_Length);
@@ -80,9 +56,9 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 		Macro::playerId = (*data)[4];
 		printf("playerid: %d \n", Macro::playerId);
 	}
-	else if ((*data)[0] == 0x1d && (*data)[7] == 0x00 && (*data)[4] == Macro::playerId && (*data).size() == 25) {
-		Macro::transparency();
-		Sleep(300);
+	else if ((*data)[0] == 0x1d && (*data)[7] == 0x00 && (*data)[4] == Macro::playerId) {
+		//Macro::transparency();
+		//Sleep(300);
 		Macro::shadowlessStep();
 	}
 	delete data;
@@ -91,6 +67,9 @@ DWORD WINAPI checkPacket(LPVOID lpParam) {
 
 void Client::Recv_Packet_Hook_Callback()
 {
+	if (Macro::cert == 0) {
+		return;
+	}
 	// get HWND for winbaram.exe
 	ByteBuffer HWND_Packet((LPVOID)0x0055DC3C, 4);
 	std::vector<uint8_t> HWND_data = HWND_Packet.ReadBytes(0, 4);
@@ -114,10 +93,7 @@ void Client::Recv_Packet_Hook_Callback()
 	//char nameMsg[DEFAULT_BUFLEN];
 	//int y;
 	
-	if (data[0] == 0x08 && data[4] == 0x00 && data[5] == 0x00) {
-		pool.enqueue([]() { nuri_loop(nullptr); });
-	}
-	else if (data[0] == 0x1d && data[7] == 0x00 && Macro::isTransparency == 1 && data[4] == Macro::playerId)
+	if (data[0] == 0x1d && data[7] == 0x00 && Macro::isTransparency == 1 && data[4] == Macro::playerId)
 		pool.enqueue(checkPacket, new std::vector<uint8_t>(dataCopy));
 
 	else if (data[0] == 0x5 && hooks->Ingoing_Packet_Length == 0xd) {
